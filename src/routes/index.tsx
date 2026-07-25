@@ -299,7 +299,6 @@ function Index() {
               {joining ? "Joining…" : "Join waitlist"}
             </Button>
           </form>
-          </div>
         </Reveal>
       </section>
 
