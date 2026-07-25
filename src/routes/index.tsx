@@ -1,8 +1,12 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, type ReactNode } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useRef, useState, type ReactNode, type FormEvent } from "react";
 import { ArrowRight, Sparkles, Search, LineChart, Youtube, Bot, Quote, CheckCircle2, Zap, Target, MessageSquareQuote } from "lucide-react";
 import heroImg from "@/assets/hero-ai-mesh.jpg";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { useServerFn } from "@tanstack/react-start";
+import { joinWaitlist } from "@/lib/waitlist.functions";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -53,6 +57,28 @@ function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; 
 }
 
 function Index() {
+  const navigate = useNavigate();
+  const submitWaitlist = useServerFn(joinWaitlist);
+  const [email, setEmail] = useState("");
+  const [joining, setJoining] = useState(false);
+
+  async function handleWaitlist(e: FormEvent, source: "landing_hero" | "landing_cta") {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setJoining(true);
+    try {
+      await submitWaitlist({ data: { email: email.trim(), source } });
+      toast.success("You're on the list — check your inbox soon.");
+      setEmail("");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Couldn't join right now");
+    } finally {
+      setJoining(false);
+    }
+  }
+
+  const goScan = () => navigate({ to: "/dashboard" });
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* NAV */}
@@ -71,8 +97,14 @@ function Index() {
             <a href="#pricing" className="story-link transition-colors hover:text-foreground">Pricing</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" className="hidden md:inline-flex">Log in</Button>
-            <Button size="sm" className="bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_10px_40px_-10px_oklch(0.65_0.24_28/0.7)]">
+            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
+              <Link to="/auth">Log in</Link>
+            </Button>
+            <Button
+              size="sm"
+              onClick={goScan}
+              className="bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_10px_40px_-10px_oklch(0.65_0.24_28/0.7)]"
+            >
               Scan my channel
             </Button>
           </div>
@@ -101,12 +133,12 @@ function Index() {
               Mentioned is the LLM SEO platform for YouTubers. We make sure ChatGPT, Perplexity, Gemini and Claude cite <em>your</em> videos when viewers ask questions in your niche.
             </p>
             <div className="mt-10 flex animate-fade-in flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "400ms", animationFillMode: "backwards" }}>
-              <Button size="lg" className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
+              <Button size="lg" onClick={goScan} className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
                 Run a free visibility scan
                 <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
               </Button>
-              <Button size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-card/70">
-                See a sample report
+              <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-card/70">
+                <Link to="/auth">Sign in</Link>
               </Button>
             </div>
             <p className="mt-4 animate-fade-in text-xs text-muted-foreground" style={{ animationDelay: "520ms", animationFillMode: "backwards" }}>Free for channels under 100K subs · No card required</p>
@@ -246,11 +278,27 @@ function Index() {
             Every day AI answers questions your videos should be answering. Start ranking inside the models your next subscribers already trust.
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button size="lg" className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
+            <Button size="lg" onClick={goScan} className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
               Run a free visibility scan
               <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Button>
-            <Button size="lg" variant="ghost" className="transition-transform duration-300 hover:-translate-y-0.5">Talk to the team</Button>
+          </div>
+          <form
+            onSubmit={(e) => handleWaitlist(e, "landing_cta")}
+            className="mx-auto mt-8 flex max-w-md flex-col gap-2 sm:flex-row"
+          >
+            <Input
+              type="email"
+              required
+              placeholder="you@channel.com"
+              value={email}
+              onChange={(ev) => setEmail(ev.target.value)}
+              className="bg-card/50"
+            />
+            <Button type="submit" variant="outline" disabled={joining} className="shrink-0">
+              {joining ? "Joining…" : "Join waitlist"}
+            </Button>
+          </form>
           </div>
         </Reveal>
       </section>
