@@ -85,6 +85,9 @@ function Dashboard() {
           <Button variant="ghost" size="sm" onClick={signOut}>
             <LogOut className="mr-2 h-4 w-4" /> Sign out
           </Button>
+          <Link to="/optimize" className="ml-2 text-sm text-primary hover:underline">
+            Optimize a video →
+          </Link>
         </div>
       </header>
 
