@@ -78,11 +78,9 @@ export const optimizeVideo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => OptimizeInput.parse(input))
   .handler(async ({ data }) => {
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) {
-      throw new Error(
-        "ANTHROPIC_API_KEY is not configured. Add it in project secrets to enable video optimization.",
-      );
+      throw new Error("LOVABLE_API_KEY is not configured.");
     }
 
     const userPayload = JSON.stringify(
@@ -96,32 +94,32 @@ export const optimizeVideo = createServerFn({ method: "POST" })
       2,
     );
 
-    const resp = await fetch("https://api.anthropic.com/v1/messages", {
+    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "x-api-key": apiKey,
-        "anthropic-version": "2023-06-01",
+        "Lovable-API-Key": apiKey,
       },
       body: JSON.stringify({
-        model: "claude-sonnet-4-5",
-        max_tokens: 4096,
-        system: SYSTEM_PROMPT,
-        messages: [{ role: "user", content: userPayload }],
+        model: "google/gemini-3.6-flash",
+        messages: [
+          { role: "system", content: SYSTEM_PROMPT },
+          { role: "user", content: userPayload },
+        ],
       }),
     });
 
     if (!resp.ok) {
       const text = await resp.text().catch(() => "");
-      if (resp.status === 429) throw new Error("Anthropic rate limit — try again shortly.");
-      if (resp.status === 401) throw new Error("Invalid ANTHROPIC_API_KEY.");
-      throw new Error(`Anthropic error (${resp.status}): ${text.slice(0, 300)}`);
+      if (resp.status === 429) throw new Error("Rate limit — try again shortly.");
+      if (resp.status === 402) throw new Error("AI credits exhausted. Please upgrade your plan.");
+      throw new Error(`AI gateway error (${resp.status}): ${text.slice(0, 300)}`);
     }
 
     const json = (await resp.json()) as {
-      content?: Array<{ type: string; text?: string }>;
+      choices?: Array<{ message?: { content?: string } }>;
     };
-    const raw = json.content?.filter((b) => b.type === "text").map((b) => b.text ?? "").join("") ?? "";
+    const raw = json.choices?.[0]?.message?.content ?? "";
 
     // Extract JSON object even if model wraps in code fences.
     const match = raw.match(/\{[\s\S]*\}/);
