@@ -126,9 +126,9 @@ export const optimizeVideo = createServerFn({ method: "POST" })
     // Extract JSON object even if model wraps in code fences.
     const match = raw.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("Model did not return JSON.");
-    let parsed: unknown;
+    let parsed: Record<string, unknown>;
     try {
-      parsed = JSON.parse(match[0]);
+      parsed = JSON.parse(match[0]) as Record<string, unknown>;
     } catch {
       throw new Error("Failed to parse model JSON response.");
     }
