@@ -14,7 +14,63 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      channel_scans: {
+        Row: {
+          channel_input: string
+          created_at: string
+          id: string
+          niche: string | null
+          results: Json
+          score: number | null
+          status: string
+          summary: string | null
+          user_id: string
+        }
+        Insert: {
+          channel_input: string
+          created_at?: string
+          id?: string
+          niche?: string | null
+          results?: Json
+          score?: number | null
+          status?: string
+          summary?: string | null
+          user_id: string
+        }
+        Update: {
+          channel_input?: string
+          created_at?: string
+          id?: string
+          niche?: string | null
+          results?: Json
+          score?: number | null
+          status?: string
+          summary?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      waitlist: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          source: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          source?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          source?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
