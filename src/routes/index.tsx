@@ -1,7 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type FormEvent } from "react";
-import { ArrowRight, Sparkles, Search, LineChart, Youtube, Bot, Quote, CheckCircle2, Zap, Target, MessageSquareQuote } from "lucide-react";
-import heroImg from "@/assets/hero-ai-mesh.jpg";
+import { ArrowRight, Sparkles, Search, LineChart, Youtube, Bot, Quote, CheckCircle2, Zap, Target, MessageSquareQuote, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useServerFn } from "@tanstack/react-start";
@@ -85,10 +84,11 @@ function Index() {
       <header className="sticky top-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <a href="#" className="group flex items-center gap-2 font-semibold tracking-tight transition-opacity hover:opacity-90">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-glow transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110">
-              <Sparkles className="h-4 w-4 text-primary-foreground" />
+            <div className="relative flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-primary shadow-glow transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110">
+              <Play className="h-4 w-4 fill-primary-foreground text-primary-foreground" />
+              <span className="absolute inset-0 rounded-lg border border-primary/60 animate-ping-ring" />
             </div>
-            Mentioned<span className="text-primary">.</span>
+            athenahq<span className="text-primary">.</span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
             <a href="#how" className="story-link transition-colors hover:text-foreground">How it works</a>
@@ -113,12 +113,17 @@ function Index() {
 
       {/* HERO */}
       <section className="relative overflow-hidden bg-gradient-hero">
+        {/* Animated grid backdrop */}
+        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-60 animate-grid [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
         {/* Floating gradient blobs */}
-        <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/20 blur-3xl animate-float" />
-        <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-accent/15 blur-3xl animate-float-slow" />
-        <div className="absolute inset-0 opacity-40">
-          <img src={heroImg} alt="" width={1600} height={1200} className="h-full w-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/60 to-background" />
+        <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/25 blur-3xl animate-float" />
+        <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl animate-float-slow" />
+        {/* Floating play icons */}
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <Play className="absolute left-[8%] top-[30%] h-6 w-6 fill-primary/40 text-primary/40 animate-float-play" style={{ animationDelay: "0s" }} />
+          <Play className="absolute right-[12%] top-[22%] h-8 w-8 fill-accent/40 text-accent/40 animate-float-play" style={{ animationDelay: "2s" }} />
+          <Play className="absolute left-[18%] bottom-[18%] h-5 w-5 fill-primary/30 text-primary/30 animate-float-play" style={{ animationDelay: "4s" }} />
+          <Play className="absolute right-[22%] bottom-[26%] h-7 w-7 fill-primary/30 text-primary/30 animate-float-play" style={{ animationDelay: "1.2s" }} />
         </div>
         <div className="relative mx-auto max-w-7xl px-6 pt-24 pb-32 md:pt-32 md:pb-40">
           <div className="mx-auto max-w-3xl text-center">
@@ -130,8 +135,29 @@ function Index() {
               Get your channel <span className="text-gradient animate-gradient">mentioned</span> when AI answers.
             </h1>
             <p className="mx-auto mt-6 max-w-2xl animate-fade-in text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "260ms", animationFillMode: "backwards" }}>
-              Mentioned is the LLM SEO platform for YouTubers. We make sure ChatGPT, Perplexity, Gemini and Claude cite <em>your</em> videos when viewers ask questions in your niche.
+              athenahq is the LLM SEO platform for YouTubers. We make sure ChatGPT, Perplexity, Gemini and Claude cite <em>your</em> videos when viewers ask questions in your niche.
             </p>
+            {/* Mock YouTube player scrubber */}
+            <div className="mx-auto mt-10 max-w-md animate-fade-in" style={{ animationDelay: "340ms", animationFillMode: "backwards" }}>
+              <div className="flex items-center gap-3 rounded-full border border-border/70 bg-card/60 px-4 py-2 backdrop-blur">
+                <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-primary shadow-glow">
+                  <Play className="h-3.5 w-3.5 fill-primary-foreground text-primary-foreground" />
+                  <span className="absolute inset-0 rounded-full border border-primary/70 animate-ping-ring" />
+                </span>
+                <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-border">
+                  <div className="h-full rounded-full bg-gradient-primary animate-progress" />
+                </div>
+                <div className="flex items-end gap-0.5">
+                  {[0, 0.15, 0.3, 0.45, 0.6].map((d, i) => (
+                    <span
+                      key={i}
+                      className="block h-3 w-0.5 origin-bottom rounded-sm bg-primary animate-wave"
+                      style={{ animationDelay: `${d}s` }}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
             <div className="mt-10 flex animate-fade-in flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "400ms", animationFillMode: "backwards" }}>
               <Button size="lg" onClick={goScan} className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
                 Run a free visibility scan
@@ -307,11 +333,11 @@ function Index() {
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-6 py-10 text-sm text-muted-foreground md:flex-row">
           <div className="flex items-center gap-2">
             <div className="flex h-6 w-6 items-center justify-center rounded bg-gradient-primary">
-              <Sparkles className="h-3 w-3 text-primary-foreground" />
+              <Play className="h-3 w-3 fill-primary-foreground text-primary-foreground" />
             </div>
-            Mentioned — LLM SEO for creators
+            athenahq — LLM SEO for creators
           </div>
-          <div>© {new Date().getFullYear()} Mentioned Labs. Not affiliated with YouTube, OpenAI, or Anthropic.</div>
+          <div>© {new Date().getFullYear()} athenahq Labs. Not affiliated with YouTube, OpenAI, or Anthropic.</div>
         </div>
       </footer>
     </div>
