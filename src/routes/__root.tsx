@@ -77,14 +77,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Mentioned — Rank YouTubers inside ChatGPT & AI search" },
+      { name: "description", content: "Mentioned makes YouTube creators discoverable inside ChatGPT, Perplexity, Gemini, and Claude. Turn AI answers into your next 10,000 subscribers." },
+      { property: "og:title", content: "Mentioned — Rank YouTubers inside ChatGPT & AI search" },
+      { property: "og:description", content: "The LLM SEO platform built for YouTubers. Get cited, recommended, and linked when AI answers questions in your niche." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
