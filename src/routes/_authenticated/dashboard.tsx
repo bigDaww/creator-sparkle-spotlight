@@ -312,9 +312,19 @@ function Avatar({ name }: { name: string }) {
   );
 }
 
-function ScoreRing({ score, color }: { score: number; color: string }) {
-  const size = 88;
-  const stroke = 8;
+function ScoreRing({
+  score,
+  color,
+  size = 88,
+  stroke = 8,
+  valueClass = "text-2xl",
+}: {
+  score: number;
+  color: string;
+  size?: number;
+  stroke?: number;
+  valueClass?: string;
+}) {
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const clamped = Math.max(0, Math.min(100, score));
@@ -343,7 +353,7 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-2xl font-bold" style={{ color }}>
+        <span className={`${valueClass} font-semibold tracking-tight`} style={{ color }}>
           {clamped}
         </span>
       </div>
