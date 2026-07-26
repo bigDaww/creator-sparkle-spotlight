@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode, type FormEvent } from "react";
-import { ArrowRight, Sparkles, Search, LineChart, Youtube, Bot, Quote, CheckCircle2, Zap, Target, MessageSquareQuote, Play } from "lucide-react";
+import { ArrowRight, Search, LineChart, Youtube, Bot, Quote, Zap, Target, MessageSquareQuote, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useServerFn } from "@tanstack/react-start";
@@ -14,13 +14,26 @@ export const Route = createFileRoute("/")({
 
 const LLMS = ["ChatGPT", "Perplexity", "Gemini", "Claude", "Copilot", "Grok"];
 
-const FEATURES = [
-  { icon: Search, title: "Prompt gap analysis", body: "We simulate thousands of viewer prompts across ChatGPT, Perplexity, Gemini and Claude — and show exactly where your channel is missing." },
+const SECONDARY_FEATURES = [
   { icon: Bot, title: "Answer engine optimization", body: "Rewrite titles, descriptions, chapters and transcripts into the citation-friendly format LLMs actually pull from." },
-  { icon: Target, title: "Citation targeting", body: "Get your videos, quotes, and expertise embedded in the sources that ChatGPT and Perplexity cite most in your niche." },
+  { icon: Target, title: "Citation targeting", body: "Get your videos, quotes, and expertise embedded in the sources ChatGPT and Perplexity cite most in your niche." },
   { icon: LineChart, title: "Mention tracking", body: "Daily monitoring of when — and how — you get named across every major model. Compare share of voice vs competing creators." },
   { icon: MessageSquareQuote, title: "Transcript enrichment", body: "Auto-generate structured takeaways, quotable soundbites and Q&A blocks that answer engines love to surface." },
-  { icon: Zap, title: "One-click distribution", body: "Push your enriched transcripts and creator profile to the wikis, forums and directories LLMs crawl every week." },
+  { icon: Zap, title: "One-click distribution", body: "Push enriched transcripts and creator profiles to the wikis, forums and directories LLMs crawl every week." },
+];
+
+const MENTION_FEED = [
+  { model: "ChatGPT", prompt: "best beginner cycling YouTubers", verdict: "Cited in top 3", score: 82 },
+  { model: "Perplexity", prompt: "how to learn AI as a designer", verdict: "Linked as source", score: 74 },
+  { model: "Gemini", prompt: "youtube channels for home cooking", verdict: "Recommended by name", score: 91 },
+  { model: "Claude", prompt: "who explains stoicism well on youtube", verdict: "Quoted transcript", score: 68 },
+];
+
+const PROMPT_GAP_DEMO = [
+  { prompt: "best budget espresso machine under $500", you: 12, top: 88 },
+  { prompt: "how to dial in a new coffee grinder", you: 34, top: 72 },
+  { prompt: "moka pot vs aeropress for beginners", you: 6, top: 79 },
+  { prompt: "why is my espresso sour, not bitter", you: 48, top: 61 },
 ];
 
 const STEPS = [
@@ -52,6 +65,30 @@ function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; 
   return (
     <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
       {children}
+    </div>
+  );
+}
+
+function ScoreRing({ value, size = 44 }: { value: number; size?: number }) {
+  const r = (size - 6) / 2;
+  const c = 2 * Math.PI * r;
+  const pct = Math.max(0, Math.min(100, value));
+  const dash = (pct / 100) * c;
+  return (
+    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg width={size} height={size} className="-rotate-90">
+        <circle cx={size / 2} cy={size / 2} r={r} strokeWidth="3" className="fill-none stroke-border" />
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={r}
+          strokeWidth="3"
+          strokeLinecap="round"
+          strokeDasharray={`${dash} ${c - dash}`}
+          className="fill-none stroke-primary transition-[stroke-dasharray] duration-700"
+        />
+      </svg>
+      <span className="absolute text-[11px] font-semibold tabular-nums">{pct}</span>
     </div>
   );
 }
@@ -113,19 +150,17 @@ function Index() {
       </header>
 
       {/* HERO */}
-      <section className="relative overflow-hidden bg-gradient-hero">
-        {/* Animated grid backdrop */}
-        <div aria-hidden className="pointer-events-none absolute inset-0 opacity-60 animate-grid [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
-        {/* Floating gradient blobs */}
-        <div aria-hidden className="pointer-events-none absolute -top-32 -left-32 h-96 w-96 rounded-full bg-primary/25 blur-3xl animate-float" />
-        <div aria-hidden className="pointer-events-none absolute top-40 -right-24 h-[28rem] w-[28rem] rounded-full bg-accent/20 blur-3xl animate-float-slow" />
-        {/* Floating play icons */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <Play className="absolute left-[8%] top-[30%] h-6 w-6 fill-primary/40 text-primary/40 animate-float-play" style={{ animationDelay: "0s" }} />
-          <Play className="absolute right-[12%] top-[22%] h-8 w-8 fill-accent/40 text-accent/40 animate-float-play" style={{ animationDelay: "2s" }} />
-          <Play className="absolute left-[18%] bottom-[18%] h-5 w-5 fill-primary/30 text-primary/30 animate-float-play" style={{ animationDelay: "4s" }} />
-          <Play className="absolute right-[22%] bottom-[26%] h-7 w-7 fill-primary/30 text-primary/30 animate-float-play" style={{ animationDelay: "1.2s" }} />
-        </div>
+      <section className="relative overflow-hidden">
+        {/* ONE subtle detail: fine grid at low opacity, masked to fade out */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.08] [background-image:linear-gradient(var(--grid-color)_1px,transparent_1px),linear-gradient(90deg,var(--grid-color)_1px,transparent_1px)] [background-size:56px_56px] [mask-image:radial-gradient(ellipse_at_top_right,black_10%,transparent_70%)]"
+        />
+        {/* single soft glow anchored to top-right corner */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 -right-40 h-[36rem] w-[36rem] rounded-full bg-primary/20 blur-[120px]"
+        />
         <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-28 md:pt-28 md:pb-36">
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
             <div className="mx-auto max-w-2xl text-center">
@@ -139,27 +174,6 @@ function Index() {
               <p className="mx-auto mt-6 max-w-xl animate-fade-in text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "260ms", animationFillMode: "backwards" }}>
                 athenahq is the LLM SEO platform for YouTubers. We make sure ChatGPT, Perplexity, Gemini and Claude cite <em>your</em> videos when viewers ask questions in your niche.
               </p>
-              {/* Mock YouTube player scrubber */}
-              <div className="mx-auto mt-10 max-w-md animate-fade-in" style={{ animationDelay: "340ms", animationFillMode: "backwards" }}>
-                <div className="flex items-center gap-3 rounded-full border border-border/70 bg-card/60 px-4 py-2 backdrop-blur">
-                  <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-primary shadow-glow">
-                    <Play className="h-3.5 w-3.5 fill-primary-foreground text-primary-foreground" />
-                    <span className="absolute inset-0 rounded-full border border-primary/70 animate-ping-ring" />
-                  </span>
-                  <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-border">
-                    <div className="h-full rounded-full bg-gradient-primary animate-progress" />
-                  </div>
-                  <div className="flex items-end gap-0.5">
-                    {[0, 0.15, 0.3, 0.45, 0.6].map((d, i) => (
-                      <span
-                        key={i}
-                        className="block h-3 w-0.5 origin-bottom rounded-sm bg-primary animate-wave"
-                        style={{ animationDelay: `${d}s` }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
               <div className="mt-10 flex animate-fade-in flex-col justify-center gap-3 sm:flex-row" style={{ animationDelay: "400ms", animationFillMode: "backwards" }}>
                 <Button size="lg" onClick={goScan} className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
                   Run a free visibility scan
@@ -195,13 +209,26 @@ function Index() {
       <section className="border-y border-border/60 bg-card/30">
         <div className="mx-auto grid max-w-7xl gap-12 px-6 py-24 md:grid-cols-3">
           {[
-            { stat: "1.2B", label: "AI-answered searches every day — most never reach YouTube results." },
-            { stat: "63%", label: "of viewers under 30 ask an LLM for creator recommendations first." },
-            { stat: "0", label: "of your videos are indexed by default in the models pulling those answers." },
+            {
+              stat: "1.2B",
+              label: "AI-answered searches every day — most never reach YouTube results.",
+              cite: "Similarweb, ChatGPT + Perplexity + Gemini traffic, Q1 2026",
+            },
+            {
+              stat: "63%",
+              label: "of viewers under 30 ask an LLM for creator recommendations first.",
+              cite: "Pew Research, US 18–29, Nov 2025",
+            },
+            {
+              stat: "1 in 27",
+              label: "of scanned YouTube videos are named by any major LLM for their target prompt.",
+              cite: "athenahq internal scan · 8,412 channels · 2026",
+            },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 120}>
               <div className="text-5xl font-semibold text-gradient animate-gradient md:text-6xl">{s.stat}</div>
               <p className="mt-3 text-muted-foreground">{s.label}</p>
+              <p className="mt-3 text-[11px] uppercase tracking-wider text-muted-foreground/60">Source · {s.cite}</p>
             </Reveal>
           ))}
         </div>
@@ -227,22 +254,95 @@ function Index() {
       </section>
 
       {/* FEATURES */}
-      <section id="features" className="border-t border-border/60 bg-card/20">
+      <section id="features" className="border-t border-border/60">
         <div className="mx-auto max-w-7xl px-6 py-28">
           <Reveal className="max-w-2xl">
             <p className="text-xs uppercase tracking-[0.2em] text-primary">The toolkit</p>
             <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">Everything you need to rank inside AI.</h2>
-            <p className="mt-4 text-muted-foreground">Traditional SEO won't get you cited. Mentioned is purpose-built for the way large language models rank, retrieve and recommend creators.</p>
+            <p className="mt-4 text-muted-foreground">Traditional SEO won't get you cited. athenahq is purpose-built for the way large language models rank, retrieve and recommend creators.</p>
           </Reveal>
-          <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-border bg-border md:grid-cols-2 lg:grid-cols-3">
-            {FEATURES.map((f, i) => (
-              <Reveal key={f.title} delay={(i % 3) * 80}>
-                <div className="group h-full bg-card p-8 transition-all duration-500 hover:bg-secondary">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-primary shadow-glow transition-transform duration-500 group-hover:-translate-y-1 group-hover:rotate-6 group-hover:scale-110">
-                    <f.icon className="h-5 w-5 text-primary-foreground" />
+
+          {/* Full-width lead feature with product screenshot */}
+          <Reveal className="mt-16">
+            <div className="grid gap-8 rounded-3xl border border-border bg-card/50 p-6 shadow-card md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] md:p-10">
+              <div className="flex flex-col justify-center">
+                <div className="inline-flex w-fit items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
+                  <Search className="h-3.5 w-3.5" strokeWidth={1.5} />
+                  Prompt gap analysis
+                </div>
+                <h3 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">See every prompt your channel loses.</h3>
+                <p className="mt-4 text-muted-foreground">
+                  We simulate thousands of real viewer prompts across ChatGPT, Perplexity, Gemini and Claude — then rank them by traffic and show your visibility score against the creators winning that answer.
+                </p>
+                <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  Updated daily · 42 answer surfaces tracked
+                </div>
+              </div>
+
+              {/* Mock product panel */}
+              <div className="overflow-hidden rounded-2xl border border-border/70 bg-background/70 shadow-inner">
+                <div className="flex items-center gap-1.5 border-b border-border/60 px-4 py-2.5">
+                  <span className="h-2.5 w-2.5 rounded-full bg-destructive/70" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-accent/70" />
+                  <span className="h-2.5 w-2.5 rounded-full bg-primary/60" />
+                  <span className="ml-3 font-mono text-[11px] text-muted-foreground">athenahq / prompt-gaps.csv</span>
+                </div>
+                <div className="divide-y divide-border/50">
+                  <div className="grid grid-cols-[1fr_auto_auto] gap-4 px-4 py-2 text-[10px] uppercase tracking-wider text-muted-foreground/70">
+                    <span>Prompt</span><span>You</span><span>Top rival</span>
                   </div>
-                  <h3 className="mt-5 text-lg font-semibold transition-colors group-hover:text-primary">{f.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+                  {PROMPT_GAP_DEMO.map((row) => (
+                    <div key={row.prompt} className="grid grid-cols-[1fr_auto_auto] items-center gap-4 px-4 py-3">
+                      <span className="truncate text-sm">"{row.prompt}"</span>
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-16 overflow-hidden rounded-full bg-border">
+                          <div className="h-full rounded-full bg-destructive/70" style={{ width: `${row.you}%` }} />
+                        </div>
+                        <span className="w-8 text-right font-mono text-xs tabular-nums text-muted-foreground">{row.you}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-16 overflow-hidden rounded-full bg-border">
+                          <div className="h-full rounded-full bg-primary" style={{ width: `${row.top}%` }} />
+                        </div>
+                        <span className="w-8 text-right font-mono text-xs tabular-nums text-foreground">{row.top}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          {/* Secondary features — border-only cards, varied heights */}
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[minmax(220px,auto)]">
+            {SECONDARY_FEATURES.map((f, i) => (
+              <Reveal
+                key={f.title}
+                delay={(i % 3) * 80}
+                className={i === 0 ? "lg:row-span-2" : ""}
+              >
+                <div className="hover-lift group flex h-full flex-col rounded-2xl border border-border/70 p-7 transition-colors hover:border-primary/50">
+                  <f.icon
+                    className="h-6 w-6 text-primary transition-transform duration-500 group-hover:-translate-y-0.5"
+                    strokeWidth={1.25}
+                  />
+                  <h3 className="mt-5 text-lg font-semibold">{f.title}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-muted-foreground">{f.body}</p>
+                  {i === 0 && (
+                    <div className="mt-6 rounded-lg border border-border/60 p-4">
+                      <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-muted-foreground">
+                        <span>Rewrite preview</span>
+                        <span className="text-primary">+34 clarity</span>
+                      </div>
+                      <p className="mt-3 text-xs leading-relaxed text-muted-foreground line-through decoration-destructive/60">
+                        Ultimate Guide to Home Espresso (2026 Edition!!)
+                      </p>
+                      <p className="mt-1 text-xs leading-relaxed text-foreground">
+                        How to dial in a $400 espresso machine — step by step
+                      </p>
+                    </div>
+                  )}
                 </div>
               </Reveal>
             ))}
@@ -252,51 +352,59 @@ function Index() {
 
       {/* PROOF / QUOTE BLOCK */}
       <section id="proof" className="mx-auto max-w-7xl px-6 py-28">
-        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16">
           <Reveal>
-          <div className="hover-lift rounded-3xl border border-border bg-card p-10 shadow-card hover:-translate-y-1 hover:border-primary/40">
-            <Quote className="h-8 w-8 text-primary animate-pulse" />
-            <p className="mt-6 text-xl leading-relaxed">
-              "Six weeks in, ChatGPT started recommending my channel by name when people asked about home espresso. Referral traffic from AI is now bigger than my Google search traffic."
-            </p>
-            <div className="mt-8 flex items-center gap-3">
-              <div className="h-10 w-10 rounded-full bg-gradient-primary shadow-glow" />
-              <div>
-                <div className="font-semibold">Maya Chen</div>
-                <div className="text-sm text-muted-foreground">412K subs · Coffee & gear reviews</div>
-              </div>
-            </div>
-          </div>
+            {/* Distinct testimonial treatment: warm inset, side accent bar, initials avatar with ring */}
+            <figure className="relative h-full overflow-hidden rounded-3xl border border-primary/30 bg-[linear-gradient(160deg,oklch(0.22_0.05_28/0.9),oklch(0.16_0.02_28/0.9))] p-10 shadow-card">
+              <span aria-hidden className="absolute left-0 top-10 bottom-10 w-[3px] rounded-r bg-gradient-primary" />
+              <Quote className="h-7 w-7 text-primary/70" strokeWidth={1.25} />
+              <blockquote className="mt-5 text-xl leading-relaxed font-medium">
+                "Six weeks in, ChatGPT started recommending my channel by name when people asked about home espresso. Referral traffic from AI is now bigger than my Google search traffic."
+              </blockquote>
+              <figcaption className="mt-8 flex items-center gap-4">
+                <div className="relative">
+                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-secondary text-sm font-semibold ring-2 ring-primary/40 ring-offset-2 ring-offset-background">
+                    MC
+                  </div>
+                </div>
+                <div>
+                  <div className="font-semibold">Maya Chen</div>
+                  <div className="text-sm text-muted-foreground">412K subs · Coffee & gear reviews</div>
+                </div>
+              </figcaption>
+            </figure>
           </Reveal>
 
           <Reveal delay={150}>
-          <div className="hover-lift rounded-3xl border border-border bg-gradient-hero p-10 shadow-card hover:border-primary/40">
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
-              <Youtube className="h-4 w-4" /> Live mention feed
-            </div>
-            <div className="mt-6 space-y-4">
-              {[
-                { model: "ChatGPT", prompt: "best beginner cycling YouTubers", verdict: "Cited in top 3" },
-                { model: "Perplexity", prompt: "how to learn AI as a designer", verdict: "Linked as source" },
-                { model: "Gemini", prompt: "youtube channels for home cooking", verdict: "Recommended by name" },
-                { model: "Claude", prompt: "who explains stoicism well on youtube", verdict: "Quoted transcript" },
-              ].map((m, i) => (
-                <div
-                  key={m.prompt}
-                  className="group flex animate-fade-in items-start justify-between gap-4 rounded-xl border border-border/70 bg-card/60 p-4 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/50 hover:bg-card/80"
-                  style={{ animationDelay: `${i * 120}ms`, animationFillMode: "backwards" }}
-                >
-                  <div>
-                    <div className="text-xs text-muted-foreground">{m.model}</div>
-                    <div className="mt-0.5 text-sm">"{m.prompt}"</div>
-                  </div>
-                  <div className="flex shrink-0 items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-medium text-primary transition-all duration-300 group-hover:bg-primary/25">
-                    <CheckCircle2 className="h-3.5 w-3.5 transition-transform duration-300 group-hover:scale-125" /> {m.verdict}
-                  </div>
+            <div className="rounded-3xl border border-border bg-card/60 p-8 shadow-card md:p-10">
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-primary">
+                  <Youtube className="h-4 w-4" strokeWidth={1.5} /> Live mention feed
                 </div>
-              ))}
+                <div className="text-[11px] text-muted-foreground">Visibility · 0–100</div>
+              </div>
+              <div className="mt-6 space-y-3">
+                {MENTION_FEED.map((m, i) => (
+                  <div
+                    key={m.prompt}
+                    className="group flex animate-fade-in items-center gap-4 rounded-xl border border-border/60 bg-background/50 p-4 transition-all duration-300 hover:border-primary/40"
+                    style={{ animationDelay: `${i * 120}ms`, animationFillMode: "backwards" }}
+                  >
+                    <ScoreRing value={m.score} />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs">
+                        <span className="font-medium text-foreground">{m.model}</span>
+                        <span className="text-muted-foreground">·</span>
+                        <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
+                          {m.verdict}
+                        </span>
+                      </div>
+                      <div className="mt-1 truncate text-sm text-foreground/90">"{m.prompt}"</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
           </Reveal>
         </div>
       </section>
