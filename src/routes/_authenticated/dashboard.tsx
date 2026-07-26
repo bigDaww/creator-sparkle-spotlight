@@ -364,13 +364,80 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
   );
 }
 
-function StatPill({ icon, label }: { icon: React.ReactNode; label: string }) {
+function Metric({ value, label }: { value: string; label: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl border border-border/60 bg-background/40 px-3 py-2.5 text-xs text-muted-foreground">
-      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-muted text-foreground/80">
-        {icon}
-      </span>
-      <span className="text-foreground/90">{label}</span>
+    <div>
+      <div className="text-2xl font-semibold tracking-tight text-foreground md:text-3xl">
+        {value}
+      </div>
+      <div className="mt-1 text-xs uppercase tracking-wider text-muted-foreground">
+        {label}
+      </div>
     </div>
+  );
+}
+
+const THESIS_PILLARS = [
+  {
+    tag: "The gap",
+    title: "Prompt gap analysis",
+    body: "We simulate the exact questions your viewers ask AI, across all four engines, and show which ones already surface a competitor instead of you.",
+    Icon: Search,
+  },
+  {
+    tag: "The format",
+    title: "Answer engine optimization",
+    body: "We rewrite your titles, descriptions and transcripts into the citation-friendly structure LLMs actually extract from — not keywords, extractable facts.",
+    Icon: FileText,
+  },
+  {
+    tag: "The proof",
+    title: "Citation targeting",
+    body: "We get your quotes and expertise embedded in the third-party sources (forums, listicles, niche sites) that ChatGPT and Perplexity weight above your own channel.",
+    Icon: Link2,
+  },
+  {
+    tag: "The tracking",
+    title: "Mention monitoring",
+    body: "Once you're cited, we track it — which engine, which prompt, which competitor you beat out — so you can see the effect, not guess at it.",
+    Icon: Activity,
+  },
+] as const;
+
+function ThesisSection() {
+  return (
+    <section className="mt-16 border-t border-border/60 pt-12">
+      <div className="max-w-2xl">
+        <p className="text-xs uppercase tracking-[0.2em] text-primary">Why this works</p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+          What makes AI engines cite a video — and what we actually do about it
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          ChatGPT, Perplexity, Gemini and Claude don't rank videos. They synthesize answers
+          from text they can crawl, and they trust independent mentions over anything you
+          say about yourself.
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border/60 sm:grid-cols-2">
+        {THESIS_PILLARS.map(({ tag, title, body, Icon }, i) => (
+          <div key={tag} className="flex flex-col gap-3 bg-card p-6">
+            <div className="flex items-center justify-between">
+              <span className="font-mono text-xs text-muted-foreground/70">
+                0{i + 1}
+              </span>
+              <Icon className="h-4 w-4 text-accent" strokeWidth={1.5} />
+            </div>
+            <div>
+              <div className="text-[10px] font-medium uppercase tracking-[0.18em] text-accent">
+                {tag}
+              </div>
+              <div className="mt-1 text-base font-semibold">{title}</div>
+            </div>
+            <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
