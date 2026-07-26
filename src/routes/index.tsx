@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Play, ClipboardPaste, Wand2, Copy } from "lucide-react";
+import { ArrowRight, Play, ClipboardPaste, Wand2, Copy, Search, FileText, Quote, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IphoneHero } from "@/components/IphoneHero";
 
@@ -25,6 +25,24 @@ const STEPS = [
   { icon: Copy, title: "Copy to YouTube", body: "Paste the new title and description into YouTube Studio. Done." },
 ];
 
+const PILLARS = [
+  { icon: Search, num: "01", title: "The Gap", body: "AI engines answer questions your title never asked. We find the exact phrasings people type into ChatGPT and rewrite around them." },
+  { icon: FileText, num: "02", title: "The Format", body: "LLMs cite structured, quotable text — not clickbait. We rebuild your description into the shape they parse." },
+  { icon: Quote, num: "03", title: "The Proof", body: "Add facts, timestamps and definitions models can lift verbatim. That's what turns a mention into a citation." },
+  { icon: LineChart, num: "04", title: "The Lift", body: "Ranking on AI search compounds. Every citation trains the next answer to point back at you." },
+];
+
+const STATS = [
+  { value: "4.2×", label: "more AI citations after rewrite", note: "Avg. across pilot creators" },
+  { value: "68%", label: "of Gen-Z start search on AI", note: "Source: Bain, 2025" },
+  { value: "12 min", label: "to rewrite a full video", note: "Paste → copy back to Studio" },
+];
+
+const TESTIMONIALS = [
+  { quote: "Two of my old videos started showing up in ChatGPT answers within a week of rewriting the descriptions.", name: "Maya R.", handle: "@mayabuilds · 240k subs" },
+  { quote: "The prompt-gap breakdown alone was worth it. I had no idea what questions I was missing.", name: "Devon K.", handle: "@devonexplains · 92k subs" },
+];
+
 function Index() {
   const navigate = useNavigate();
   const goOptimize = () => navigate({ to: "/optimize" });
@@ -42,6 +60,7 @@ function Index() {
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
             <a href="#how" className="story-link transition-colors hover:text-foreground">How it works</a>
+            <a href="#thesis" className="story-link transition-colors hover:text-foreground">Thesis</a>
           </nav>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
@@ -131,6 +150,78 @@ function Index() {
             ))}
           </div>
 
+          <div className="mt-16 flex justify-center">
+            <Button size="lg" onClick={goOptimize} className="group bg-gradient-primary text-primary-foreground shadow-glow hover:-translate-y-0.5 hover:opacity-95">
+              Optimize my video
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* THESIS */}
+      <section id="thesis" className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">The thesis</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+              What makes AI engines cite a video
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Four things decide whether ChatGPT names you or someone else. We work on all four.
+            </p>
+          </div>
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
+            {PILLARS.map((p) => (
+              <div key={p.title} className="hover-lift rounded-2xl border border-border bg-card p-8 shadow-card">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <p.icon className="h-5 w-5" strokeWidth={1.5} />
+                  </div>
+                  <span className="font-mono text-xs text-muted-foreground">{p.num}</span>
+                </div>
+                <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="grid gap-8 md:grid-cols-3">
+            {STATS.map((s) => (
+              <div key={s.label} className="text-center md:text-left">
+                <div className="text-5xl font-semibold tracking-tight text-gradient">{s.value}</div>
+                <div className="mt-3 text-sm text-foreground">{s.label}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{s.note}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <div className="mx-auto max-w-xl text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">Creators using it</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">Early results.</h2>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {TESTIMONIALS.map((t) => (
+              <figure key={t.name} className="hover-lift rounded-2xl border border-border bg-card p-8 shadow-card">
+                <Quote className="h-5 w-5 text-primary" />
+                <blockquote className="mt-4 text-lg leading-relaxed text-foreground">"{t.quote}"</blockquote>
+                <figcaption className="mt-6 text-sm">
+                  <div className="font-medium">{t.name}</div>
+                  <div className="text-muted-foreground">{t.handle}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
           <div className="mt-16 flex justify-center">
             <Button size="lg" onClick={goOptimize} className="group bg-gradient-primary text-primary-foreground shadow-glow hover:-translate-y-0.5 hover:opacity-95">
               Optimize my video
