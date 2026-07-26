@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
-import { Sparkles, Loader2, ArrowLeft, Copy, Check } from "lucide-react";
+import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -112,8 +112,50 @@ function OptimizePage() {
         </form>
 
         {result != null && <ResultView data={result} copy={copy} copied={copied} />}
+        {result != null && <WhyThisWorks />}
       </main>
     </div>
+  );
+}
+
+const PILLARS = [
+  { icon: Search, tag: "The gap", title: "Matches real AI questions", body: "The new title and FAQ mirror the exact phrasing viewers type into ChatGPT and Perplexity — so your video becomes the direct answer." },
+  { icon: FileText, tag: "The format", title: "Written for LLM extraction", body: "Short, factual, quotable sentences. That's what large language models pull into their answers — not keyword-stuffed clickbait." },
+  { icon: Quote, tag: "The proof", title: "Front-loaded facts", body: "The first 2–3 lines carry the most weight for AI crawlers. We put your strongest, quotable claims there so they get cited." },
+  { icon: TrendingUp, tag: "The lift", title: "More citations, more views", body: "When AI answers name your video, viewers click through from ChatGPT, Gemini and Perplexity — traffic YouTube search alone can't reach." },
+];
+
+function WhyThisWorks() {
+  return (
+    <section className="mt-16 border-t border-border/60 pt-12">
+      <div className="max-w-2xl">
+        <p className="text-xs uppercase tracking-[0.2em] text-primary">Why this works</p>
+        <h3 className="mt-3 text-2xl font-semibold tracking-tight md:text-3xl">
+          How this boosts your ranking on AI models
+        </h3>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+          ChatGPT, Gemini, Perplexity and Claude don't rank videos like YouTube does. They pull short, factual answers from text they can crawl. Here's how the rewrite above gets you picked.
+        </p>
+      </div>
+
+      <div className="mt-8 grid gap-px overflow-hidden rounded-2xl border border-border bg-border/60 sm:grid-cols-2">
+        {PILLARS.map(({ icon: Icon, tag, title, body }, i) => (
+          <div key={title} className="flex h-full flex-col gap-3 bg-background p-6 transition-colors hover:bg-card/60 md:p-7">
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] uppercase tracking-[0.2em] text-primary">{tag}</span>
+              <span className="font-mono text-xs text-muted-foreground/60">0{i + 1}</span>
+            </div>
+            <div className="flex items-start gap-3">
+              <Icon className="mt-1 h-5 w-5 shrink-0 text-foreground/80" strokeWidth={1.25} />
+              <div>
+                <h4 className="text-lg font-semibold tracking-tight">{title}</h4>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{body}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
