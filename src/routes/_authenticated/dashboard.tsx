@@ -9,10 +9,11 @@ import {
   CheckCircle2,
   XCircle,
   ArrowRight,
-  Link2Off,
-  Quote,
-  Clock,
   Wrench,
+  Search,
+  FileText,
+  Link2,
+  Activity,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
