@@ -30,7 +30,8 @@ export function IphoneHero({
       const r = el.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
-      setTilt({ x: py * -12, y: px * 14 });
+      // Clamp to max 10deg on either axis
+      setTilt({ x: Math.max(-10, Math.min(10, py * -20)), y: Math.max(-10, Math.min(10, px * 20)) });
     };
     const onLeave = () => setTilt({ x: 0, y: 0 });
     el.addEventListener("mousemove", onMove);
