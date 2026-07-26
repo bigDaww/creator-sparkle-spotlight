@@ -235,6 +235,66 @@ function Index() {
       </section>
 
       {/* HOW IT WORKS */}
+      {/* THESIS — what makes AI cite a video, and the four things we do */}
+      <section className="border-b border-border/60">
+        <div className="mx-auto max-w-7xl px-6 py-28">
+          <Reveal className="max-w-3xl">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">The thesis</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+              What makes AI engines cite a video — and what we actually do about it.
+            </h2>
+            <p className="mt-5 text-muted-foreground md:text-lg">
+              ChatGPT, Perplexity, Gemini and Claude don't rank videos. They synthesize answers from text they can crawl, and they trust independent mentions over anything you say about yourself.
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid gap-px overflow-hidden rounded-3xl border border-border bg-border/70 md:grid-cols-2">
+            {[
+              {
+                tag: "The gap",
+                icon: Search,
+                title: "Prompt gap analysis",
+                body: "We simulate the exact questions your viewers ask AI, across all four engines, and show which ones already surface a competitor instead of you.",
+              },
+              {
+                tag: "The format",
+                icon: Bot,
+                title: "Answer engine optimization",
+                body: "We rewrite your titles, descriptions and transcripts into the citation-friendly structure LLMs actually extract from — not keywords, extractable facts.",
+              },
+              {
+                tag: "The proof",
+                icon: Quote,
+                title: "Citation targeting",
+                body: "We get your quotes and expertise embedded in the third-party sources — forums, listicles, niche sites — that ChatGPT and Perplexity weight above your own channel.",
+              },
+              {
+                tag: "The tracking",
+                icon: LineChart,
+                title: "Mention monitoring",
+                body: "Once you're cited, we track it — which engine, which prompt, which competitor you beat — so you can see the effect, not guess at it.",
+              },
+            ].map((p, i) => (
+              <Reveal key={p.title} delay={(i % 2) * 100}>
+                <div className="group relative flex h-full flex-col gap-5 bg-background p-8 transition-colors hover:bg-card/60 md:p-10">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] uppercase tracking-[0.2em] text-primary">{p.tag}</span>
+                    <span className="font-mono text-xs text-muted-foreground/60">0{i + 1}</span>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <p.icon className="mt-1 h-6 w-6 shrink-0 text-foreground/80 transition-transform duration-500 group-hover:-translate-y-0.5" strokeWidth={1.25} />
+                    <div>
+                      <h3 className="text-2xl font-semibold tracking-tight">{p.title}</h3>
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground md:text-base">{p.body}</p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section id="how" className="mx-auto max-w-7xl px-6 py-28">
         <Reveal className="max-w-2xl">
           <p className="text-xs uppercase tracking-[0.2em] text-primary">How it works</p>
