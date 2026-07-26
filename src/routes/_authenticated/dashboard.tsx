@@ -14,6 +14,10 @@ import {
   FileText,
   Link2,
   Activity,
+  Quote,
+  Link2Off,
+  Clock,
+  ChevronDown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -167,15 +171,30 @@ function Dashboard() {
         </form>
 
         {latest && (
-          <section className="mt-10">
+          <section className="mt-16">
             <p className="text-xs uppercase tracking-[0.2em] text-primary">Latest scan</p>
 
-            <div className="mt-3 rounded-3xl border border-border bg-card p-6 md:p-10">
-              <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+            {/* Summary — no border, sits on page bg */}
+            <div className="mt-6 flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
+              {typeof latest.score === "number" && tier && (
+                <div className="order-first flex items-center gap-6 md:order-last">
+                  <ScoreRing score={latest.score} color={tier.color} size={168} stroke={10} valueClass="text-5xl" />
+                  <div>
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      Visibility
+                    </div>
+                    <div className="mt-1 text-lg font-medium" style={{ color: tier.color }}>
+                      {tier.label}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-4">
                   <Avatar name={display!.name} />
                   <div className="min-w-0">
-                    <h2 className="text-2xl font-semibold leading-tight md:text-3xl">
+                    <h2 className="text-2xl font-medium leading-tight tracking-tight md:text-3xl">
                       {display!.name}
                     </h2>
                     <p className="mt-1 text-sm text-muted-foreground">
@@ -185,70 +204,38 @@ function Dashboard() {
                   </div>
                 </div>
 
-                {typeof latest.score === "number" && tier && (
-                  <div className="flex items-center gap-4">
-                    <ScoreRing score={latest.score} color={tier.color} />
-                    <div>
-                      <div className="text-xs uppercase tracking-wider text-muted-foreground">
-                        Visibility
-                      </div>
-                      <div className="text-sm font-semibold" style={{ color: tier.color }}>
-                        {tier.label}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
+                <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-muted-foreground">
+                  <span className="inline-flex items-center gap-1.5">
+                    <Quote className="h-3.5 w-3.5" />0 third-party mentions
+                  </span>
+                  <span className="h-3 w-px bg-border" aria-hidden />
+                  <span className="inline-flex items-center gap-1.5">
+                    <Link2Off className="h-3.5 w-3.5" />
+                    {uncited} of {totalEngines} engines don't cite you
+                  </span>
+                  <span className="h-3 w-px bg-border" aria-hidden />
+                  <span className="inline-flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5" />
+                    Last cited: never
+                  </span>
+                </div>
 
-              <div className="mt-8 grid gap-6 border-t border-border/60 pt-6 sm:grid-cols-3">
-                <Metric value={`${citedCount}/${totalEngines}`} label="Engines citing you" />
-                <Metric value="0" label="Third-party mentions" />
-                <Metric value="Never" label="Last cited" />
+                <p className="mt-4 max-w-xl text-sm leading-relaxed text-muted-foreground/80">
+                  Building off-platform mentions and citation-friendly content will fix this.
+                </p>
               </div>
             </div>
 
-            <div className="mt-4 grid gap-3 md:grid-cols-2">
+            {/* Engine list — thin dividers, no cards */}
+            <div className="mt-14 divide-y divide-border/60 border-y border-border/60">
               {latest.results.map((r, i) => (
-                <div
-                  key={i}
-                  className="group flex flex-col rounded-2xl border border-border bg-card p-5 transition-colors hover:border-border/80"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2.5">
-                      {r.cited ? (
-                        <CheckCircle2 className="h-4 w-4 text-primary" />
-                      ) : (
-                        <XCircle className="h-4 w-4 text-muted-foreground/70" />
-                      )}
-                      <span className="text-sm font-semibold">{r.model}</span>
-                    </div>
-                    <span
-                      className={`text-[10px] font-medium uppercase tracking-wider ${
-                        r.cited ? "text-primary" : "text-muted-foreground/70"
-                      }`}
-                    >
-                      {r.cited ? "Cited" : "Not cited"}
-                    </span>
-                  </div>
-
-                  <p className="mt-4 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
-                    {r.verdict}
-                  </p>
-
-                  <div className="mt-3 flex items-start gap-2">
-                    <Wrench className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
-                    <p className="line-clamp-2 text-sm leading-relaxed text-foreground/90">
-                      <span className="font-semibold text-accent">Fix: </span>
-                      {r.recommendation}
-                    </p>
-                  </div>
-                </div>
+                <EngineRow key={i} result={r} />
               ))}
             </div>
 
-            <div className="mt-6 flex flex-col items-center justify-between gap-4 rounded-2xl border border-border bg-card/60 p-6 sm:flex-row sm:text-left">
+            <div className="mt-14 flex flex-col items-center justify-between gap-4 sm:flex-row sm:text-left">
               <div>
-                <div className="text-base font-semibold">Ready to get cited?</div>
+                <div className="text-base font-medium">Ready to get cited?</div>
                 <p className="text-sm text-muted-foreground">
                   Turn these gaps into an optimization plan for your next video.
                 </p>
@@ -325,9 +312,19 @@ function Avatar({ name }: { name: string }) {
   );
 }
 
-function ScoreRing({ score, color }: { score: number; color: string }) {
-  const size = 88;
-  const stroke = 8;
+function ScoreRing({
+  score,
+  color,
+  size = 88,
+  stroke = 8,
+  valueClass = "text-2xl",
+}: {
+  score: number;
+  color: string;
+  size?: number;
+  stroke?: number;
+  valueClass?: string;
+}) {
   const radius = (size - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
   const clamped = Math.max(0, Math.min(100, score));
@@ -356,10 +353,67 @@ function ScoreRing({ score, color }: { score: number; color: string }) {
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">
-        <span className="text-2xl font-bold" style={{ color }}>
+        <span className={`${valueClass} font-semibold tracking-tight`} style={{ color }}>
           {clamped}
         </span>
       </div>
+    </div>
+  );
+}
+
+function EngineRow({ result }: { result: ScanResult }) {
+  const [open, setOpen] = useState(false);
+  const r = result;
+  return (
+    <div className="py-5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {r.cited ? (
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+        ) : (
+          <XCircle className="h-4 w-4 shrink-0 text-muted-foreground/60" />
+        )}
+        <span className="text-sm font-medium">{r.model}</span>
+        <span
+          className={`text-[10px] font-medium uppercase tracking-[0.18em] ${
+            r.cited ? "text-primary" : "text-muted-foreground/60"
+          }`}
+        >
+          {r.cited ? "Cited" : "Not cited"}
+        </span>
+
+        <div className="ml-auto flex items-center gap-4">
+          <p className="hidden max-w-md truncate text-sm text-foreground/90 sm:block">
+            <span className="font-medium text-accent">Fix: </span>
+            {r.recommendation}
+          </p>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            aria-expanded={open}
+          >
+            {open ? "Hide" : "Details"}
+            <ChevronDown
+              className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
+      </div>
+
+      <p className="mt-2 flex items-start gap-2 text-sm text-foreground/90 sm:hidden">
+        <Wrench className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+        <span>
+          <span className="font-medium text-accent">Fix: </span>
+          {r.recommendation}
+        </span>
+      </p>
+
+      {open && (
+        <div className="mt-4 space-y-3 pl-8 text-sm">
+          <p className="text-foreground/80">"{r.prompt}"</p>
+          <p className="leading-relaxed text-muted-foreground">{r.verdict}</p>
+        </div>
+      )}
     </div>
   );
 }
