@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
-import { useState } from "react";
-import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -111,7 +111,14 @@ function OptimizePage() {
           </Button>
         </form>
 
-        {result != null && <ResultView data={result} copy={copy} copied={copied} />}
+        {result != null && (
+          <StagedResult
+            data={result}
+            oldTitle={title}
+            copy={copy}
+            copied={copied}
+          />
+        )}
         {result != null && <WhyThisWorks />}
       </main>
     </div>
