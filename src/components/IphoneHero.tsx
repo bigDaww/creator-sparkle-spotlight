@@ -44,7 +44,7 @@ export function IphoneHero({
   return (
     <div
       ref={wrapRef}
-      className={`relative mx-auto w-[280px] md:w-[320px] animate-float-slow ${className}`}
+      className={`relative mx-auto w-[196px] md:w-[224px] animate-float-slow ${className}`}
       style={{ perspective: "1200px" }}
     >
       {/* Glow halo */}

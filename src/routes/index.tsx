@@ -128,7 +128,7 @@ function Index() {
         </div>
         <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-28 md:pt-28 md:pb-36">
           <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
-            <div className="max-w-2xl text-left">
+            <div className="max-w-2xl text-left lg:pl-[15%]">
               <div className="inline-flex animate-fade-in items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:border-primary/40">
                 <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                 Built for the 47% of Gen Z who ask ChatGPT before Google
