@@ -61,8 +61,8 @@ function OptimizePage() {
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border/50 bg-background/70 backdrop-blur-xl">
         <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-6">
-          <Link to="/dashboard" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
-            <ArrowLeft className="h-4 w-4" /> Back to dashboard
+          <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="h-4 w-4" /> Back
           </Link>
           <div className="flex items-center gap-2 font-semibold">
             <Sparkles className="h-4 w-4 text-primary" /> Optimize
@@ -71,9 +71,9 @@ function OptimizePage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-10">
-        <h1 className="text-3xl font-semibold tracking-tight">Optimize a video for AI search</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Get a better title & description</h1>
         <p className="mt-2 text-muted-foreground">
-          Paste your current metadata and full transcript. We'll return a title, description and FAQ block optimized for LLM citations.
+          Paste your video details below. We'll rewrite them so AI (ChatGPT, Gemini, Perplexity) picks your video first.
         </p>
 
         <form
@@ -85,19 +85,19 @@ function OptimizePage() {
           className="mt-8 space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
         >
           <div className="space-y-1.5">
-            <Label htmlFor="title">Current title</Label>
+            <Label htmlFor="title">Your video title</Label>
             <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="desc">Current description</Label>
+            <Label htmlFor="desc">Your description</Label>
             <Textarea id="desc" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="tags">Current tags (comma separated)</Label>
+            <Label htmlFor="tags">Tags (comma separated)</Label>
             <Input id="tags" value={tags} onChange={(e) => setTags(e.target.value)} placeholder="react, tutorial, hooks" />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="tx">Transcript <span className="text-destructive">*</span></Label>
+            <Label htmlFor="tx">Video transcript <span className="text-destructive">*</span></Label>
             <Textarea id="tx" rows={10} value={transcript} onChange={(e) => setTranscript(e.target.value)} required />
           </div>
           <Button
@@ -107,7 +107,7 @@ function OptimizePage() {
           >
             {mut.isPending ? (
               <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Optimizing…</>
-            ) : "Optimize"}
+            ) : "Get better title & description"}
           </Button>
         </form>
 
