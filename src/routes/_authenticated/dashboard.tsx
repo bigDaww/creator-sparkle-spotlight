@@ -361,6 +361,63 @@ function ScoreRing({
   );
 }
 
+function EngineRow({ result }: { result: ScanResult }) {
+  const [open, setOpen] = useState(false);
+  const r = result;
+  return (
+    <div className="py-5">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {r.cited ? (
+          <CheckCircle2 className="h-4 w-4 shrink-0 text-primary" />
+        ) : (
+          <XCircle className="h-4 w-4 shrink-0 text-muted-foreground/60" />
+        )}
+        <span className="text-sm font-medium">{r.model}</span>
+        <span
+          className={`text-[10px] font-medium uppercase tracking-[0.18em] ${
+            r.cited ? "text-primary" : "text-muted-foreground/60"
+          }`}
+        >
+          {r.cited ? "Cited" : "Not cited"}
+        </span>
+
+        <div className="ml-auto flex items-center gap-4">
+          <p className="hidden max-w-md truncate text-sm text-foreground/90 sm:block">
+            <span className="font-medium text-accent">Fix: </span>
+            {r.recommendation}
+          </p>
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
+            aria-expanded={open}
+          >
+            {open ? "Hide" : "Details"}
+            <ChevronDown
+              className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
+            />
+          </button>
+        </div>
+      </div>
+
+      <p className="mt-2 flex items-start gap-2 text-sm text-foreground/90 sm:hidden">
+        <Wrench className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" />
+        <span>
+          <span className="font-medium text-accent">Fix: </span>
+          {r.recommendation}
+        </span>
+      </p>
+
+      {open && (
+        <div className="mt-4 space-y-3 pl-8 text-sm">
+          <p className="text-foreground/80">"{r.prompt}"</p>
+          <p className="leading-relaxed text-muted-foreground">{r.verdict}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function Metric({ value, label }: { value: string; label: string }) {
   return (
     <div>
