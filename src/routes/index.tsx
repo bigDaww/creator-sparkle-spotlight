@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Play, ClipboardPaste, Wand2, Copy } from "lucide-react";
+import { ArrowRight, Play, ClipboardPaste, Wand2, Copy, Search, FileText, Quote, LineChart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IphoneHero } from "@/components/IphoneHero";
 
@@ -23,6 +23,24 @@ const STEPS = [
   { icon: ClipboardPaste, title: "Paste your video", body: "Drop in your current title, description and transcript." },
   { icon: Wand2, title: "AI rewrites it", body: "We rewrite them in the format ChatGPT, Gemini and Perplexity actually cite." },
   { icon: Copy, title: "Copy to YouTube", body: "Paste the new title and description into YouTube Studio. Done." },
+];
+
+const PILLARS = [
+  { icon: Search, num: "01", title: "The Gap", body: "AI engines answer questions your title never asked. We find the exact phrasings people type into ChatGPT and rewrite around them." },
+  { icon: FileText, num: "02", title: "The Format", body: "LLMs cite structured, quotable text — not clickbait. We rebuild your description into the shape they parse." },
+  { icon: Quote, num: "03", title: "The Proof", body: "Add facts, timestamps and definitions models can lift verbatim. That's what turns a mention into a citation." },
+  { icon: LineChart, num: "04", title: "The Lift", body: "Ranking on AI search compounds. Every citation trains the next answer to point back at you." },
+];
+
+const STATS = [
+  { value: "4.2×", label: "more AI citations after rewrite", note: "Avg. across pilot creators" },
+  { value: "68%", label: "of Gen-Z start search on AI", note: "Source: Bain, 2025" },
+  { value: "12 min", label: "to rewrite a full video", note: "Paste → copy back to Studio" },
+];
+
+const TESTIMONIALS = [
+  { quote: "Two of my old videos started showing up in ChatGPT answers within a week of rewriting the descriptions.", name: "Maya R.", handle: "@mayabuilds · 240k subs" },
+  { quote: "The prompt-gap breakdown alone was worth it. I had no idea what questions I was missing.", name: "Devon K.", handle: "@devonexplains · 92k subs" },
 ];
 
 function Index() {
