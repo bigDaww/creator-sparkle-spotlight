@@ -161,6 +161,8 @@ function Index() {
       <footer className="border-t border-border/60 py-10 text-center text-xs text-muted-foreground">
         athenahq · Built for YouTubers
       </footer>
+
+      {/* moved above */}
     </div>
   );
 }
