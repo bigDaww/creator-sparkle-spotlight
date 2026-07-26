@@ -158,11 +158,81 @@ function Index() {
         </div>
       </section>
 
+      {/* THESIS */}
+      <section id="thesis" className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">The thesis</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+              What makes AI engines cite a video
+            </h2>
+            <p className="mt-4 text-muted-foreground">
+              Four things decide whether ChatGPT names you or someone else. We work on all four.
+            </p>
+          </div>
+          <div className="mt-14 grid gap-6 md:grid-cols-2">
+            {PILLARS.map((p) => (
+              <div key={p.title} className="hover-lift rounded-2xl border border-border bg-card p-8 shadow-card">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <p.icon className="h-5 w-5" strokeWidth={1.5} />
+                  </div>
+                  <span className="font-mono text-xs text-muted-foreground">{p.num}</span>
+                </div>
+                <h3 className="mt-5 text-xl font-semibold">{p.title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* STATS */}
+      <section className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-20">
+          <div className="grid gap-8 md:grid-cols-3">
+            {STATS.map((s) => (
+              <div key={s.label} className="text-center md:text-left">
+                <div className="text-5xl font-semibold tracking-tight text-gradient">{s.value}</div>
+                <div className="mt-3 text-sm text-foreground">{s.label}</div>
+                <div className="mt-1 text-xs text-muted-foreground">{s.note}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="border-t border-border/60">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <div className="mx-auto max-w-xl text-center">
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">Creators using it</p>
+            <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">Early results.</h2>
+          </div>
+          <div className="mt-12 grid gap-6 md:grid-cols-2">
+            {TESTIMONIALS.map((t) => (
+              <figure key={t.name} className="hover-lift rounded-2xl border border-border bg-card p-8 shadow-card">
+                <Quote className="h-5 w-5 text-primary" />
+                <blockquote className="mt-4 text-lg leading-relaxed text-foreground">"{t.quote}"</blockquote>
+                <figcaption className="mt-6 text-sm">
+                  <div className="font-medium">{t.name}</div>
+                  <div className="text-muted-foreground">{t.handle}</div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+          <div className="mt-16 flex justify-center">
+            <Button size="lg" onClick={goOptimize} className="group bg-gradient-primary text-primary-foreground shadow-glow hover:-translate-y-0.5 hover:opacity-95">
+              Optimize my video
+              <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          </div>
+        </div>
+      </section>
+
       <footer className="border-t border-border/60 py-10 text-center text-xs text-muted-foreground">
         athenahq · Built for YouTubers
       </footer>
-
-      {/* moved above */}
     </div>
   );
 }
