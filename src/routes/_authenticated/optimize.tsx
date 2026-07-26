@@ -386,10 +386,12 @@ function ResultView({
   data,
   copy,
   copied,
+  hideTitles,
 }: {
   data: unknown;
   copy: (key: string, text: string) => void;
   copied: string | null;
+  hideTitles?: boolean;
 }) {
   const r = data as Optimization;
 
@@ -418,7 +420,7 @@ function ResultView({
 
   return (
     <div className="mt-8 space-y-6">
-      {r.title_options && r.title_options.length > 0 && (
+      {!hideTitles && r.title_options && r.title_options.length > 0 && (
         <section className="rounded-3xl border border-border bg-card p-6 md:p-8">
           <h2 className="text-lg font-semibold">Title options</h2>
           <ul className="mt-4 space-y-3">
