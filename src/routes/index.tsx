@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { useServerFn } from "@tanstack/react-start";
 import { joinWaitlist } from "@/lib/waitlist.functions";
 import { toast } from "sonner";
+import { IphoneHero } from "@/components/IphoneHero";
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -125,49 +126,55 @@ function Index() {
           <Play className="absolute left-[18%] bottom-[18%] h-5 w-5 fill-primary/30 text-primary/30 animate-float-play" style={{ animationDelay: "4s" }} />
           <Play className="absolute right-[22%] bottom-[26%] h-7 w-7 fill-primary/30 text-primary/30 animate-float-play" style={{ animationDelay: "1.2s" }} />
         </div>
-        <div className="relative mx-auto max-w-7xl px-6 pt-24 pb-32 md:pt-32 md:pb-40">
-          <div className="mx-auto max-w-3xl text-center">
-            <div className="mx-auto inline-flex animate-fade-in items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:border-primary/40">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              Built for the 47% of Gen Z who ask ChatGPT before Google
-            </div>
-            <h1 className="mt-6 animate-fade-in text-5xl font-semibold leading-[1.05] tracking-tight md:text-7xl" style={{ animationDelay: "120ms", animationFillMode: "backwards" }}>
-              Get your channel <span className="text-gradient animate-gradient">mentioned</span> when AI answers.
-            </h1>
-            <p className="mx-auto mt-6 max-w-2xl animate-fade-in text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "260ms", animationFillMode: "backwards" }}>
-              athenahq is the LLM SEO platform for YouTubers. We make sure ChatGPT, Perplexity, Gemini and Claude cite <em>your</em> videos when viewers ask questions in your niche.
-            </p>
-            {/* Mock YouTube player scrubber */}
-            <div className="mx-auto mt-10 max-w-md animate-fade-in" style={{ animationDelay: "340ms", animationFillMode: "backwards" }}>
-              <div className="flex items-center gap-3 rounded-full border border-border/70 bg-card/60 px-4 py-2 backdrop-blur">
-                <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-primary shadow-glow">
-                  <Play className="h-3.5 w-3.5 fill-primary-foreground text-primary-foreground" />
-                  <span className="absolute inset-0 rounded-full border border-primary/70 animate-ping-ring" />
-                </span>
-                <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-border">
-                  <div className="h-full rounded-full bg-gradient-primary animate-progress" />
-                </div>
-                <div className="flex items-end gap-0.5">
-                  {[0, 0.15, 0.3, 0.45, 0.6].map((d, i) => (
-                    <span
-                      key={i}
-                      className="block h-3 w-0.5 origin-bottom rounded-sm bg-primary animate-wave"
-                      style={{ animationDelay: `${d}s` }}
-                    />
-                  ))}
+        <div className="relative mx-auto max-w-7xl px-6 pt-20 pb-28 md:pt-28 md:pb-36">
+          <div className="grid items-center gap-12 lg:grid-cols-[minmax(0,1fr)_auto] lg:gap-16">
+            <div className="max-w-2xl text-left">
+              <div className="inline-flex animate-fade-in items-center gap-2 rounded-full border border-border bg-card/60 px-4 py-1.5 text-xs text-muted-foreground backdrop-blur transition-colors hover:border-primary/40">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                Built for the 47% of Gen Z who ask ChatGPT before Google
+              </div>
+              <h1 className="mt-6 animate-fade-in text-5xl font-semibold leading-[1.05] tracking-tight md:text-6xl xl:text-7xl" style={{ animationDelay: "120ms", animationFillMode: "backwards" }}>
+                Get your channel <span className="text-gradient animate-gradient">mentioned</span> when AI answers.
+              </h1>
+              <p className="mt-6 max-w-xl animate-fade-in text-lg text-muted-foreground md:text-xl" style={{ animationDelay: "260ms", animationFillMode: "backwards" }}>
+                athenahq is the LLM SEO platform for YouTubers. We make sure ChatGPT, Perplexity, Gemini and Claude cite <em>your</em> videos when viewers ask questions in your niche.
+              </p>
+              {/* Mock YouTube player scrubber */}
+              <div className="mt-10 max-w-md animate-fade-in" style={{ animationDelay: "340ms", animationFillMode: "backwards" }}>
+                <div className="flex items-center gap-3 rounded-full border border-border/70 bg-card/60 px-4 py-2 backdrop-blur">
+                  <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gradient-primary shadow-glow">
+                    <Play className="h-3.5 w-3.5 fill-primary-foreground text-primary-foreground" />
+                    <span className="absolute inset-0 rounded-full border border-primary/70 animate-ping-ring" />
+                  </span>
+                  <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-border">
+                    <div className="h-full rounded-full bg-gradient-primary animate-progress" />
+                  </div>
+                  <div className="flex items-end gap-0.5">
+                    {[0, 0.15, 0.3, 0.45, 0.6].map((d, i) => (
+                      <span
+                        key={i}
+                        className="block h-3 w-0.5 origin-bottom rounded-sm bg-primary animate-wave"
+                        style={{ animationDelay: `${d}s` }}
+                      />
+                    ))}
+                  </div>
                 </div>
               </div>
+              <div className="mt-10 flex animate-fade-in flex-col gap-3 sm:flex-row" style={{ animationDelay: "400ms", animationFillMode: "backwards" }}>
+                <Button size="lg" onClick={goScan} className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
+                  Run a free visibility scan
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Button>
+                <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-card/70">
+                  <Link to="/auth">Sign in</Link>
+                </Button>
+              </div>
+              <p className="mt-4 animate-fade-in text-xs text-muted-foreground" style={{ animationDelay: "520ms", animationFillMode: "backwards" }}>Free for channels under 100K subs · No card required</p>
             </div>
-            <div className="mt-10 flex animate-fade-in flex-col items-center justify-center gap-3 sm:flex-row" style={{ animationDelay: "400ms", animationFillMode: "backwards" }}>
-              <Button size="lg" onClick={goScan} className="group bg-gradient-primary text-primary-foreground shadow-glow transition-all duration-300 hover:-translate-y-0.5 hover:opacity-95 hover:shadow-[0_20px_60px_-15px_oklch(0.65_0.24_28/0.7)]">
-                Run a free visibility scan
-                <ArrowRight className="ml-2 h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-border bg-card/40 backdrop-blur transition-all duration-300 hover:-translate-y-0.5 hover:bg-card/70">
-                <Link to="/auth">Sign in</Link>
-              </Button>
+
+            <div className="animate-fade-in flex justify-center lg:justify-end" style={{ animationDelay: "300ms", animationFillMode: "backwards" }}>
+              <IphoneHero />
             </div>
-            <p className="mt-4 animate-fade-in text-xs text-muted-foreground" style={{ animationDelay: "520ms", animationFillMode: "backwards" }}>Free for channels under 100K subs · No card required</p>
           </div>
 
           {/* LLM marquee */}
