@@ -13,7 +13,7 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/_authenticated/optimize")({
   head: () => ({
     meta: [
-      { title: "Optimize a video — Mentioned" },
+      { title: "Optimize a video — athenahq" },
       { name: "description", content: "Rewrite YouTube titles and descriptions for AI answer engines." },
       { name: "robots", content: "noindex" },
     ],
