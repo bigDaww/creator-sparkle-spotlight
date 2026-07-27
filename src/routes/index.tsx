@@ -48,6 +48,33 @@ const TESTIMONIALS = [
   { quote: "The prompt-gap breakdown alone was worth it. I had no idea what questions I was missing.", name: "Devon K.", handle: "@devonexplains · 92k subs" },
 ];
 
+const FAQS = [
+  {
+    q: "How is this different from regular YouTube SEO?",
+    a: "YouTube SEO optimizes for YouTube's own search and recommendation algorithm. We optimize for how large language models — ChatGPT, Gemini, Perplexity, Claude — read and quote your video's metadata when answering user questions.",
+  },
+  {
+    q: "Do I need to re-upload my video?",
+    a: "No. You just copy the new title and description into YouTube Studio. The video, thumbnail and URL stay the same.",
+  },
+  {
+    q: "Will this hurt my existing YouTube rankings?",
+    a: "The rewrites keep the entities and keywords YouTube already ranks you for, and add the phrasing AI engines look for. In most cases it helps both.",
+  },
+  {
+    q: "How long until I see citations?",
+    a: "AI engines re-crawl at their own pace — usually days to a few weeks. Older, higher-authority videos tend to get picked up first.",
+  },
+  {
+    q: "Do you need my channel login?",
+    a: "Never. You paste the title, description and transcript. We give you text back. You paste it into YouTube yourself.",
+  },
+  {
+    q: "What if my video just isn't that useful?",
+    a: "We'll tell you. Optimization can't manufacture value that isn't in the content — if the underlying video doesn't answer a real question, the fix is the content, not the metadata.",
+  },
+];
+
 function Index() {
   const navigate = useNavigate();
   const goOptimize = () => navigate({ to: "/optimize" });
@@ -213,6 +240,27 @@ function Index() {
               Optimize my video
               <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Button>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section id="faq" className="border-t border-border/60 bg-card/30">
+        <div className="mx-auto max-w-6xl px-6 py-24">
+          <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:gap-20">
+            <div className="max-w-xs">
+              <p className="text-xs uppercase tracking-[0.2em] text-primary">FAQ</p>
+              <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">Questions.</h2>
+              <p className="mt-4 text-sm text-muted-foreground">Everything creators ask before they paste in their first video.</p>
+            </div>
+            <dl className="divide-y divide-border/60">
+              {FAQS.map((f) => (
+                <div key={f.q} className="grid grid-cols-1 gap-2 py-6 first:pt-0 last:pb-0 md:grid-cols-[1fr_1.4fr] md:gap-10">
+                  <dt className="text-base font-medium text-foreground">{f.q}</dt>
+                  <dd className="text-sm leading-relaxed text-muted-foreground">{f.a}</dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </section>
