@@ -92,6 +92,7 @@ function Index() {
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
             <a href="#how" className="story-link transition-colors hover:text-foreground">How it works</a>
             <a href="#compare" className="story-link transition-colors hover:text-foreground">Before / after</a>
+            <a href="#faq" className="story-link transition-colors hover:text-foreground">FAQ</a>
           </nav>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
