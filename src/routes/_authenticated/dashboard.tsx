@@ -16,6 +16,15 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { runChannelScan, listMyScans } from "@/lib/scan.functions";
 
+function normalizeChannel(input: string): string {
+  let s = input.trim().toLowerCase();
+  s = s.replace(/^https?:\/\//, "").replace(/^www\./, "");
+  s = s.replace(/^(m\.|music\.)?youtube\.com\//, "");
+  s = s.replace(/^\/+/, "").replace(/\/+$/, "");
+  s = s.replace(/^@+/, "");
+  return s;
+}
+
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
@@ -66,7 +75,7 @@ function DashboardPage() {
 
   const scansQ = useQuery({ queryKey: ["my-scans"], queryFn: () => list() });
   const mut = useMutation({
-    mutationFn: () => scan({ data: { channel, niche } }),
+    mutationFn: () => scan({ data: { channel: normalizeChannel(channel), niche } }),
     onSuccess: () => {
       toast.success("Scan complete");
       scansQ.refetch();
@@ -113,7 +122,12 @@ function DashboardPage() {
         </form>
 
         {active ? (
-          <ScanView active={active} history={scans.filter((s) => s.channel_input === active.channel_input)} />
+          <ScanView
+            active={active}
+            history={scans.filter(
+              (s) => normalizeChannel(s.channel_input) === normalizeChannel(active.channel_input),
+            )}
+          />
         ) : (
           <p className="mt-16 text-center text-sm text-muted-foreground">
             Run your first scan to see visibility across ChatGPT, Perplexity, Gemini and Claude.
