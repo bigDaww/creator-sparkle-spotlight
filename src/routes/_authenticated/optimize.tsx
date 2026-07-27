@@ -226,7 +226,7 @@ function StagedResult({
   const newTitle = r.title_options?.[0] ?? "";
 
   const missingEntities = useMemo(() => {
-    const oldSet = new Set(tokenize(oldTitle + " " + (r.raw ? "" : "")));
+    const oldSet = new Set(tokenize(oldTitle));
     const pool = [
       newTitle,
       r.summary ?? "",
