@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Play, ClipboardPaste, Wand2, Copy, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IphoneHero } from "@/components/IphoneHero";
+import { UserMenu } from "@/components/UserMenu";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -95,9 +96,7 @@ function Index() {
             <a href="#faq" className="story-link transition-colors hover:text-foreground">FAQ</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm" className="hidden md:inline-flex">
-              <Link to="/auth">Log in</Link>
-            </Button>
+            <UserMenu />
             <Button
               size="sm"
               onClick={goOptimize}

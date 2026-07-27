@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { optimizeVideo } from "@/lib/optimize.functions";
 import { toast } from "sonner";
+import { UserMenu } from "@/components/UserMenu";
 
 export const Route = createFileRoute("/_authenticated/optimize")({
   head: () => ({
@@ -64,8 +65,11 @@ function OptimizePage() {
           <Link to="/" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
-          <div className="flex items-center gap-2 font-semibold">
-            <Sparkles className="h-4 w-4 text-primary" /> Optimize
+          <div className="flex items-center gap-4">
+            <div className="hidden items-center gap-2 font-semibold sm:flex">
+              <Sparkles className="h-4 w-4 text-primary" /> Optimize
+            </div>
+            <UserMenu />
           </div>
         </div>
       </header>
