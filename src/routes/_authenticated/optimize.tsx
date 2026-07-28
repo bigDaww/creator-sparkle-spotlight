@@ -304,7 +304,10 @@ function TranscriptCitability() {
   );
 }
 
-function UpgradeGate() {
+function UpgradeGate({
+  title = "Transcript Citability is a Pro feature",
+  body = "Upgrade to analyze whether each line of your transcript is quotable by ChatGPT, Gemini, Perplexity and Claude — with one-line rewrites for the weak spots.",
+}: { title?: string; body?: string } = {}) {
   return (
     <section className="rounded-3xl border border-primary/30 bg-primary/5 p-6 md:p-8">
       <div className="flex items-start gap-4">
@@ -317,10 +320,10 @@ function UpgradeGate() {
             <p className="text-xs uppercase tracking-[0.2em] text-primary">Paid feature</p>
           </div>
           <h3 className="mt-2 text-xl font-semibold tracking-tight">
-            Transcript Citability is a Pro feature
+            {title}
           </h3>
           <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-            Upgrade to analyze whether each line of your transcript is quotable by ChatGPT, Gemini, Perplexity and Claude — with one-line rewrites for the weak spots.
+            {body}
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
