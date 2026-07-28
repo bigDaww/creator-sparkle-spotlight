@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requirePaidPlan } from "@/integrations/supabase/require-paid";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const ChapterSchema = z.object({
   timestamp: z.string().default(""),
@@ -122,7 +123,7 @@ export const runPrepublishCheck = createServerFn({ method: "POST" })
   });
 
 export const listMyPrepublishChecks = createServerFn({ method: "GET" })
-  .middleware([requirePaidPlan])
+  .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("prepublish_checks")
