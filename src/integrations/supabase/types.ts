@@ -50,6 +50,27 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          id: string
+          plan: Database["public"]["Enums"]["app_plan"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id: string
+          plan?: Database["public"]["Enums"]["app_plan"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          plan?: Database["public"]["Enums"]["app_plan"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           created_at: string
@@ -76,10 +97,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_paid_plan: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
-      [_ in never]: never
+      app_plan: "free" | "paid"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -206,6 +227,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_plan: ["free", "paid"],
+    },
   },
 } as const
