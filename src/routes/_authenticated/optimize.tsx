@@ -2,12 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight } from "lucide-react";
+import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight, Lock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { optimizeVideo } from "@/lib/optimize.functions";
+import { analyzeTranscript } from "@/lib/transcript.functions";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -75,18 +77,25 @@ function OptimizePage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-10">
-        <h1 className="text-3xl font-semibold tracking-tight">Get a better title & description</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Optimize your video for AI answer engines</h1>
         <p className="mt-2 text-muted-foreground">
-          Paste your video details below. We'll rewrite them so AI (ChatGPT, Gemini, Perplexity) picks your video first.
+          Rewrite your title & description, or check whether your transcript itself is quotable by ChatGPT, Gemini and Perplexity.
         </p>
 
+        <Tabs defaultValue="metadata" className="mt-8">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="metadata">Title & Description</TabsTrigger>
+            <TabsTrigger value="transcript">Transcript Citability</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="metadata" className="mt-6">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (!transcript.trim()) return toast.error("Transcript is required");
             mut.mutate();
           }}
-          className="mt-8 space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
+          className="space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
         >
           <div className="space-y-1.5">
             <Label htmlFor="title">Your video title</Label>
@@ -124,6 +133,12 @@ function OptimizePage() {
           />
         )}
         {result != null && <WhyThisWorks />}
+          </TabsContent>
+
+          <TabsContent value="transcript" className="mt-6">
+            <TranscriptCitability />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
