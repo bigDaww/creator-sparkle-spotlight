@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight, Lock, AlertTriangle } from "lucide-react";
+import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight, Lock, AlertTriangle, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { optimizeVideo } from "@/lib/optimize.functions";
 import { analyzeTranscript } from "@/lib/transcript.functions";
+import { runPrepublishCheck, listMyPrepublishChecks } from "@/lib/prepublish.functions";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -70,7 +71,6 @@ function OptimizePage() {
           <nav className="hidden items-center gap-1 sm:flex">
             <Link to="/dashboard" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Dashboard</Link>
             <Link to="/optimize" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Optimize</Link>
-            <Link to="/prepublish" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Pre-Publish</Link>
           </nav>
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-2 font-semibold sm:flex">
@@ -88,9 +88,10 @@ function OptimizePage() {
         </p>
 
         <Tabs defaultValue="metadata" className="mt-8">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-xl grid-cols-3">
             <TabsTrigger value="metadata">Title & Description</TabsTrigger>
             <TabsTrigger value="transcript">Transcript Citability</TabsTrigger>
+            <TabsTrigger value="prepublish">Pre-Publish Score</TabsTrigger>
           </TabsList>
 
           <TabsContent value="metadata" className="mt-6">
@@ -142,6 +143,10 @@ function OptimizePage() {
 
           <TabsContent value="transcript" className="mt-6">
             <TranscriptCitability />
+          </TabsContent>
+
+          <TabsContent value="prepublish" className="mt-6">
+            <PrepublishTab />
           </TabsContent>
         </Tabs>
       </main>
