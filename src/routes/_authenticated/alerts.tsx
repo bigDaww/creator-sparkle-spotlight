@@ -2,12 +2,13 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import type { ReactNode } from "react";
 import { ArrowLeft, Bell, Loader2, Plus, Trash2, TrendingDown, TrendingUp, CheckCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import UserMenu from "@/components/UserMenu";
+import { UserMenu } from "@/components/UserMenu";
 import {
   listTrackedChannels,
   listAlertEvents,
@@ -57,7 +58,7 @@ type EventRow = {
   tracked_channels?: { channel_input: string; is_competitor: boolean } | null;
 };
 
-function eventLabel(e: EventRow): { title: string; detail: string; icon: JSX.Element; tone: string } {
+function eventLabel(e: EventRow): { title: string; detail: string; icon: ReactNode; tone: string } {
   const ch = e.tracked_channels?.channel_input ?? "channel";
   switch (e.event_type) {
     case "score_up":
