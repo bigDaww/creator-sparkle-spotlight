@@ -50,6 +50,42 @@ export type Database = {
         }
         Relationships: []
       }
+      prepublish_checks: {
+        Row: {
+          breakdown: Json
+          chapters: Json
+          composite_score: number | null
+          created_at: string
+          description: string
+          id: string
+          thumbnail_text: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          breakdown?: Json
+          chapters?: Json
+          composite_score?: number | null
+          created_at?: string
+          description?: string
+          id?: string
+          thumbnail_text?: string
+          title?: string
+          user_id: string
+        }
+        Update: {
+          breakdown?: Json
+          chapters?: Json
+          composite_score?: number | null
+          created_at?: string
+          description?: string
+          id?: string
+          thumbnail_text?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
