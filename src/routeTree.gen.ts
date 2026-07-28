@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as ApiPublicHooksRefreshAlertsRouteImport } from './routes/api/public/hooks/refresh-alerts'
 
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
@@ -39,18 +40,26 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicHooksRefreshAlertsRoute =
+  ApiPublicHooksRefreshAlertsRouteImport.update({
+    id: '/api/public/hooks/refresh-alerts',
+    path: '/api/public/hooks/refresh-alerts',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
+  '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
+  '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -59,12 +68,23 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
+  '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/optimize'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/optimize'
+    | '/api/public/hooks/refresh-alerts'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/optimize'
+  to:
+    | '/'
+    | '/auth'
+    | '/dashboard'
+    | '/optimize'
+    | '/api/public/hooks/refresh-alerts'
   id:
     | '__root__'
     | '/'
@@ -72,12 +92,14 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/optimize'
+    | '/api/public/hooks/refresh-alerts'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiPublicHooksRefreshAlertsRoute: typeof ApiPublicHooksRefreshAlertsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -117,6 +139,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/hooks/refresh-alerts': {
+      id: '/api/public/hooks/refresh-alerts'
+      path: '/api/public/hooks/refresh-alerts'
+      fullPath: '/api/public/hooks/refresh-alerts'
+      preLoaderRoute: typeof ApiPublicHooksRefreshAlertsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -137,6 +166,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiPublicHooksRefreshAlertsRoute: ApiPublicHooksRefreshAlertsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
