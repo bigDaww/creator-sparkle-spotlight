@@ -1,0 +1,1 @@
+REVOKE EXECUTE ON FUNCTION public.has_paid_plan(UUID) FROM authenticated;
