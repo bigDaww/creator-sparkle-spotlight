@@ -86,18 +86,16 @@ export const runPrepublishCheck = createServerFn({ method: "POST" })
     const raw = json.choices?.[0]?.message?.content ?? "";
     const match = raw.match(/\{[\s\S]*\}/);
     if (!match) throw new Error("Model did not return JSON.");
-    let parsed: {
-      composite_score?: number;
-      breakdown?: Record<string, unknown>;
-    };
     try {
-      parsed = JSON.parse(match[0]);
+      JSON.parse(match[0]);
     } catch {
       throw new Error("Failed to parse model JSON response.");
     }
+    const parsedRaw = match[0];
+    const parsedObj = JSON.parse(parsedRaw) as { composite_score?: number };
 
-    const composite = Number.isFinite(parsed.composite_score)
-      ? Math.max(0, Math.min(100, Math.round(parsed.composite_score as number)))
+    const composite = Number.isFinite(parsedObj.composite_score)
+      ? Math.max(0, Math.min(100, Math.round(parsedObj.composite_score as number)))
       : null;
 
     const { data: saved, error } = await context.supabase
@@ -109,7 +107,7 @@ export const runPrepublishCheck = createServerFn({ method: "POST" })
         chapters: data.chapters,
         thumbnail_text: data.thumbnail_text,
         composite_score: composite,
-        breakdown: parsed as unknown as Record<string, unknown>,
+        breakdown: JSON.parse(parsedRaw),
       })
       .select("id, created_at")
       .single();
@@ -117,9 +115,9 @@ export const runPrepublishCheck = createServerFn({ method: "POST" })
     if (error) throw new Error(`Failed to save check: ${error.message}`);
 
     return {
-      id: saved.id,
-      created_at: saved.created_at,
-      result: parsed,
+      id: saved.id as string,
+      created_at: saved.created_at as string,
+      result: parsedRaw,
     };
   });
 
