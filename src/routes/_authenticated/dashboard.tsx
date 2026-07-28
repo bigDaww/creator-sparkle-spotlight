@@ -96,7 +96,6 @@ function DashboardPage() {
           <nav className="hidden items-center gap-1 sm:flex">
             <Link to="/dashboard" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Dashboard</Link>
             <Link to="/optimize" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Optimize</Link>
-            <Link to="/prepublish" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Pre-Publish</Link>
           </nav>
           <div className="flex items-center gap-2 text-sm font-semibold sm:hidden">
             <Sparkles className="h-4 w-4 text-primary" /> Dashboard

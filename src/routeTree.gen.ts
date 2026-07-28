@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as AuthenticatedPrepublishRouteImport } from './routes/_authenticated/prepublish'
 import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 
@@ -30,11 +29,6 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedPrepublishRoute = AuthenticatedPrepublishRouteImport.update({
-  id: '/prepublish',
-  path: '/prepublish',
-  getParentRoute: () => AuthenticatedRouteRoute,
-} as any)
 const AuthenticatedOptimizeRoute = AuthenticatedOptimizeRouteImport.update({
   id: '/optimize',
   path: '/optimize',
@@ -51,14 +45,12 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
-  '/prepublish': typeof AuthenticatedPrepublishRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
-  '/prepublish': typeof AuthenticatedPrepublishRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -67,13 +59,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
-  '/_authenticated/prepublish': typeof AuthenticatedPrepublishRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/dashboard' | '/optimize' | '/prepublish'
+  fullPaths: '/' | '/auth' | '/dashboard' | '/optimize'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/dashboard' | '/optimize' | '/prepublish'
+  to: '/' | '/auth' | '/dashboard' | '/optimize'
   id:
     | '__root__'
     | '/'
@@ -81,7 +72,6 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/dashboard'
     | '/_authenticated/optimize'
-    | '/_authenticated/prepublish'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -113,13 +103,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/prepublish': {
-      id: '/_authenticated/prepublish'
-      path: '/prepublish'
-      fullPath: '/prepublish'
-      preLoaderRoute: typeof AuthenticatedPrepublishRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
-    }
     '/_authenticated/optimize': {
       id: '/_authenticated/optimize'
       path: '/optimize'
@@ -140,13 +123,11 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOptimizeRoute: typeof AuthenticatedOptimizeRoute
-  AuthenticatedPrepublishRoute: typeof AuthenticatedPrepublishRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOptimizeRoute: AuthenticatedOptimizeRoute,
-  AuthenticatedPrepublishRoute: AuthenticatedPrepublishRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
