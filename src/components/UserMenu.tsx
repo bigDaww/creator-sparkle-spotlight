@@ -121,6 +121,9 @@ export function UserMenu() {
         <DropdownMenuItem onSelect={() => navigate({ to: "/dashboard" })}>
           <UserIcon className="mr-2 h-4 w-4" /> Dashboard
         </DropdownMenuItem>
+        <DropdownMenuItem onSelect={() => navigate({ to: "/prepublish" })}>
+          <Sparkles className="mr-2 h-4 w-4" /> Pre-Publish Check
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem onSelect={handleSignOut} className="text-destructive focus:text-destructive">
           <LogOut className="mr-2 h-4 w-4" /> Sign out
