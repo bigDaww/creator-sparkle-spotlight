@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      alert_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          new_value: Json | null
+          old_value: Json | null
+          seen: boolean
+          tracked_channel_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          seen?: boolean
+          tracked_channel_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          new_value?: Json | null
+          old_value?: Json | null
+          seen?: boolean
+          tracked_channel_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_events_tracked_channel_id_fkey"
+            columns: ["tracked_channel_id"]
+            isOneToOne: false
+            referencedRelation: "tracked_channels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       channel_scans: {
         Row: {
           channel_input: string
@@ -104,6 +145,42 @@ export type Database = {
           id?: string
           plan?: Database["public"]["Enums"]["app_plan"]
           updated_at?: string
+        }
+        Relationships: []
+      }
+      tracked_channels: {
+        Row: {
+          channel_input: string
+          created_at: string
+          id: string
+          is_competitor: boolean
+          last_checked_at: string | null
+          last_cited_models: string[]
+          last_score: number | null
+          niche: string
+          user_id: string
+        }
+        Insert: {
+          channel_input: string
+          created_at?: string
+          id?: string
+          is_competitor?: boolean
+          last_checked_at?: string | null
+          last_cited_models?: string[]
+          last_score?: number | null
+          niche: string
+          user_id: string
+        }
+        Update: {
+          channel_input?: string
+          created_at?: string
+          id?: string
+          is_competitor?: boolean
+          last_checked_at?: string | null
+          last_cited_models?: string[]
+          last_score?: number | null
+          niche?: string
+          user_id?: string
         }
         Relationships: []
       }
