@@ -2,12 +2,14 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight } from "lucide-react";
+import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight, Lock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { optimizeVideo } from "@/lib/optimize.functions";
+import { analyzeTranscript } from "@/lib/transcript.functions";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -75,18 +77,25 @@ function OptimizePage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-6 py-10">
-        <h1 className="text-3xl font-semibold tracking-tight">Get a better title & description</h1>
+        <h1 className="text-3xl font-semibold tracking-tight">Optimize your video for AI answer engines</h1>
         <p className="mt-2 text-muted-foreground">
-          Paste your video details below. We'll rewrite them so AI (ChatGPT, Gemini, Perplexity) picks your video first.
+          Rewrite your title & description, or check whether your transcript itself is quotable by ChatGPT, Gemini and Perplexity.
         </p>
 
+        <Tabs defaultValue="metadata" className="mt-8">
+          <TabsList className="grid w-full max-w-md grid-cols-2">
+            <TabsTrigger value="metadata">Title & Description</TabsTrigger>
+            <TabsTrigger value="transcript">Transcript Citability</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="metadata" className="mt-6">
         <form
           onSubmit={(e) => {
             e.preventDefault();
             if (!transcript.trim()) return toast.error("Transcript is required");
             mut.mutate();
           }}
-          className="mt-8 space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
+          className="space-y-5 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
         >
           <div className="space-y-1.5">
             <Label htmlFor="title">Your video title</Label>
@@ -124,6 +133,12 @@ function OptimizePage() {
           />
         )}
         {result != null && <WhyThisWorks />}
+          </TabsContent>
+
+          <TabsContent value="transcript" className="mt-6">
+            <TranscriptCitability />
+          </TabsContent>
+        </Tabs>
       </main>
     </div>
   );
@@ -135,6 +150,188 @@ const PILLARS = [
   { icon: Quote, tag: "The proof", title: "Front-loaded facts", body: "The first 2–3 lines carry the most weight for AI crawlers. We put your strongest, quotable claims there so they get cited." },
   { icon: TrendingUp, tag: "The lift", title: "More citations, more views", body: "When AI answers name your video, viewers click through from ChatGPT, Gemini and Perplexity — traffic YouTube search alone can't reach." },
 ];
+
+type ClaimRating = "highly_citable" | "too_vague";
+type Claim = { text: string; rating: ClaimRating; reason?: string; rewrite?: string | null };
+type TranscriptAnalysis = { score: number; summary?: string; claims: Claim[] };
+
+function TranscriptCitability() {
+  const analyze = useServerFn(analyzeTranscript);
+  const [text, setText] = useState("");
+  const [result, setResult] = useState<TranscriptAnalysis | null>(null);
+  const [locked, setLocked] = useState(false);
+
+  const mut = useMutation({
+    mutationFn: () => analyze({ data: { transcript: text } }),
+    onSuccess: (r) => {
+      setLocked(false);
+      try {
+        const parsed = JSON.parse((r as { analysis: string }).analysis) as TranscriptAnalysis;
+        setResult(parsed);
+        toast.success("Analysis ready");
+      } catch {
+        toast.error("Couldn't parse analysis");
+      }
+    },
+    onError: (e) => {
+      const msg = e instanceof Error ? e.message : "Failed";
+      if (msg.includes("PAID_PLAN_REQUIRED")) {
+        setLocked(true);
+        setResult(null);
+      } else {
+        toast.error(msg);
+      }
+    },
+  });
+
+  const highly = result?.claims.filter((c) => c.rating === "highly_citable").length ?? 0;
+  const vague = result?.claims.filter((c) => c.rating === "too_vague").length ?? 0;
+
+  return (
+    <div className="space-y-8">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (text.trim().length < 20) return toast.error("Paste a longer transcript");
+          setResult(null);
+          setLocked(false);
+          mut.mutate();
+        }}
+        className="space-y-4 rounded-3xl border border-border bg-card p-6 shadow-card md:p-8"
+      >
+        <div className="space-y-1.5">
+          <Label htmlFor="tx-only">
+            Paste your full transcript <span className="text-destructive">*</span>
+          </Label>
+          <p className="text-xs text-muted-foreground">
+            We'll break it into individual claims and rate each one on whether ChatGPT, Gemini or Perplexity would quote it.
+          </p>
+          <Textarea
+            id="tx-only"
+            rows={12}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            placeholder="Paste the full transcript here…"
+            required
+          />
+        </div>
+        <Button
+          type="submit"
+          disabled={mut.isPending}
+          className="bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90"
+        >
+          {mut.isPending ? (
+            <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Analyzing…</>
+          ) : "Check transcript citability"}
+        </Button>
+      </form>
+
+      {locked && <UpgradeGate />}
+
+      {result && (
+        <>
+          <section className="rounded-3xl border border-border bg-card p-6 md:p-8">
+            <div className="flex flex-wrap items-end gap-6">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                  Transcript citability
+                </p>
+                <div className="mt-2 flex items-baseline gap-2">
+                  <span className={`text-5xl font-bold ${scoreColor(result.score)}`}>{result.score}</span>
+                  <span className="text-sm text-muted-foreground">/ 100</span>
+                </div>
+              </div>
+              <div className="flex flex-wrap gap-4 text-sm">
+                <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-3 py-1 text-emerald-300">
+                  {highly} highly citable
+                </span>
+                <span className="rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-amber-300">
+                  {vague} too vague
+                </span>
+              </div>
+            </div>
+            {result.summary && (
+              <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{result.summary}</p>
+            )}
+          </section>
+
+          <section className="rounded-3xl border border-border bg-card p-6 md:p-8">
+            <h2 className="text-lg font-semibold">Claim-by-claim breakdown</h2>
+            <ul className="mt-4 divide-y divide-border/60">
+              {result.claims.map((c, i) => (
+                <li key={i} className="py-4 first:pt-0 last:pb-0">
+                  <div className="flex items-start justify-between gap-3">
+                    <p className="flex-1 text-sm leading-relaxed text-foreground">{c.text}</p>
+                    <span
+                      className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium uppercase tracking-wide ${
+                        c.rating === "highly_citable"
+                          ? "border border-emerald-400/30 bg-emerald-400/10 text-emerald-300"
+                          : "border border-amber-400/30 bg-amber-400/10 text-amber-300"
+                      }`}
+                    >
+                      {c.rating === "highly_citable" ? "Highly citable" : "Too vague"}
+                    </span>
+                  </div>
+                  {c.reason && (
+                    <p className="mt-1.5 text-xs text-muted-foreground">{c.reason}</p>
+                  )}
+                  {c.rating === "too_vague" && c.rewrite && (
+                    <div className="mt-3 flex items-start gap-2 rounded-xl border border-primary/30 bg-primary/5 p-3">
+                      <ArrowRight className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                      <div>
+                        <p className="text-[11px] uppercase tracking-[0.18em] text-primary">Rewrite</p>
+                        <p className="mt-1 text-sm leading-relaxed text-foreground">{c.rewrite}</p>
+                      </div>
+                    </div>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </section>
+        </>
+      )}
+    </div>
+  );
+}
+
+function UpgradeGate() {
+  return (
+    <section className="rounded-3xl border border-primary/30 bg-primary/5 p-6 md:p-8">
+      <div className="flex items-start gap-4">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-primary/40 bg-primary/10 text-primary">
+          <Lock className="h-5 w-5" />
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="h-4 w-4 text-primary" />
+            <p className="text-xs uppercase tracking-[0.2em] text-primary">Paid feature</p>
+          </div>
+          <h3 className="mt-2 text-xl font-semibold tracking-tight">
+            Transcript Citability is a Pro feature
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            Upgrade to analyze whether each line of your transcript is quotable by ChatGPT, Gemini, Perplexity and Claude — with one-line rewrites for the weak spots.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              to="/"
+              hash="waitlist"
+              className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:opacity-90"
+            >
+              Upgrade to Pro
+            </Link>
+            <a
+              href="mailto:shahilyadav2912@gmail.com?subject=athenahq%20Pro%20access"
+              className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-sm text-foreground hover:bg-card"
+            >
+              Contact us
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
 
 function WhyThisWorks() {
   return (
