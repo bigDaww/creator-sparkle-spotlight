@@ -11,9 +11,9 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Sign in — CoraHQ" },
-      { name: "description", content: "Sign in to CoraHQ to scan your channel and rank inside AI answers." },
-      { property: "og:title", content: "Sign in — CoraHQ" },
+      { title: "Sign in — athenahq" },
+      { name: "description", content: "Sign in to athenahq to scan your channel and rank inside AI answers." },
+      { property: "og:title", content: "Sign in — athenahq" },
       { property: "og:description", content: "Sign in to run a free LLM visibility scan on your YouTube channel." },
       { name: "robots", content: "noindex" },
     ],
@@ -83,7 +83,7 @@ function AuthPage() {
           <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-gradient-primary">
             <Sparkles className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
-          CoraHQ
+          athenahq
         </Link>
         <div className="rounded-3xl border border-border bg-card p-8 shadow-card">
           <h1 className="text-2xl font-semibold tracking-tight">

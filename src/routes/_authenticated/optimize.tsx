@@ -17,7 +17,7 @@ import { UserMenu } from "@/components/UserMenu";
 export const Route = createFileRoute("/_authenticated/optimize")({
   head: () => ({
     meta: [
-      { title: "Optimize a video — CoraHQ" },
+      { title: "Optimize a video — athenahq" },
       { name: "description", content: "Rewrite YouTube titles and descriptions for AI answer engines." },
       { name: "robots", content: "noindex" },
     ],
@@ -335,7 +335,7 @@ function UpgradeGate({
               Upgrade to Pro
             </Link>
             <a
-              href="mailto:shahilyadav2912@gmail.com?subject=CoraHQ%20Pro%20access"
+              href="mailto:shahilyadav2912@gmail.com?subject=athenahq%20Pro%20access"
               className="inline-flex items-center gap-2 rounded-full border border-border px-5 py-2 text-sm text-foreground hover:bg-card"
             >
               Contact us

@@ -22,7 +22,7 @@ import { PAID_PLAN_REQUIRED } from "@/integrations/supabase/require-paid";
 export const Route = createFileRoute("/_authenticated/alerts")({
   head: () => ({
     meta: [
-      { title: "Alerts — CoraHQ" },
+      { title: "Alerts — athenahq" },
       { name: "description", content: "Track channels and get alerted when their AI-search visibility changes." },
       { name: "robots", content: "noindex" },
     ],
