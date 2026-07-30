@@ -7,9 +7,9 @@ import { UserMenu } from "@/components/UserMenu";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "athenahq — Better YouTube titles for AI search" },
+      { title: "CoraHQ — Better YouTube titles for AI search" },
       { name: "description", content: "Paste your video. Get a title and description written to rank on ChatGPT, Gemini and Perplexity." },
-      { property: "og:title", content: "athenahq — Better YouTube titles for AI search" },
+      { property: "og:title", content: "CoraHQ — Better YouTube titles for AI search" },
       { property: "og:description", content: "Paste your video. Get a title and description written to rank on ChatGPT, Gemini and Perplexity." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -88,7 +88,7 @@ function Index() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-card">
               <Play className="h-3.5 w-3.5 fill-foreground text-foreground" />
             </div>
-            athenahq<span className="text-primary">.</span>
+            CoraHQ<span className="text-primary">.</span>
           </a>
           <nav className="hidden items-center gap-8 text-sm text-muted-foreground md:flex">
             <a href="#how" className="story-link transition-colors hover:text-foreground">How it works</a>
@@ -266,7 +266,7 @@ function Index() {
       </section>
 
       <footer className="border-t border-border/60 py-10 text-center text-xs text-muted-foreground">
-        athenahq · Built for YouTubers
+        CoraHQ · Built for YouTubers
       </footer>
     </div>
   );
