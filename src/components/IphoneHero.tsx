@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import phoneVideoAsset from "@/assets/phone-hero.mp4.asset.json";
+import phoneVideoAsset from "@/assets/phone-hero-2.mp4.asset.json";
 
 // Replace this URL to swap the phone video. Nothing else needs to change.
 export const DEFAULT_PHONE_VIDEO_SRC = phoneVideoAsset.url;
