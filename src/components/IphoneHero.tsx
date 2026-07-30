@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+import phoneVideoAsset from "@/assets/phone-hero.mp4.asset.json";
 
 // Replace this URL to swap the phone video. Nothing else needs to change.
-export const DEFAULT_PHONE_VIDEO_SRC =
-  "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4";
+export const DEFAULT_PHONE_VIDEO_SRC = phoneVideoAsset.url;
 
 // Fallback poster shown while loading or if the video fails to load.
 const DEFAULT_PHONE_POSTER =
