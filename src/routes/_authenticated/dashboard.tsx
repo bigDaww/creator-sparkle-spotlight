@@ -28,7 +28,7 @@ function normalizeChannel(input: string): string {
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
-      { title: "Channel dashboard — athenahq" },
+      { title: "Channel dashboard — CoraHQ" },
       { name: "description", content: "Track your AI-search visibility across ChatGPT, Perplexity, Gemini and Claude." },
       { name: "robots", content: "noindex" },
     ],
