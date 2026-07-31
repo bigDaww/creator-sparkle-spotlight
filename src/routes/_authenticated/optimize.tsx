@@ -70,6 +70,14 @@ function OptimizePage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
 
+  if (planQuery.isPending || plan !== "paid") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">
+        <Loader2 className="h-5 w-5 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border/50 bg-background/70 backdrop-blur-xl">
