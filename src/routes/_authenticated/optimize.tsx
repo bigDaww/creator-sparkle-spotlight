@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight, Lock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { optimizeVideo } from "@/lib/optimize.functions";
 import { analyzeTranscript } from "@/lib/transcript.functions";
+import { getMyPlan } from "@/lib/plan.functions";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -26,6 +27,15 @@ export const Route = createFileRoute("/_authenticated/optimize")({
 
 function OptimizePage() {
   const optimize = useServerFn(optimizeVideo);
+  const navigate = useNavigate();
+  const fetchPlan = useServerFn(getMyPlan);
+  const planQuery = useQuery({ queryKey: ["my-plan"], queryFn: () => fetchPlan({}) });
+  const plan = planQuery.data?.plan;
+
+  useEffect(() => {
+    if (plan === "free" || planQuery.isError) navigate({ to: "/pricing" });
+  }, [plan, planQuery.isError, navigate]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");
@@ -60,6 +70,14 @@ function OptimizePage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
 
+  if (planQuery.isPending || plan !== "paid") {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">
+        <Loader2 className="h-5 w-5 animate-spin" />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="sticky top-0 z-40 border-b border-border/50 bg-background/70 backdrop-blur-xl">
@@ -71,6 +89,7 @@ function OptimizePage() {
             <Link to="/dashboard" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Dashboard</Link>
             <Link to="/optimize" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Optimize</Link>
             <Link to="/alerts" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Alerts</Link>
+            <Link to="/pricing" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Pricing</Link>
           </nav>
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-2 font-semibold sm:flex">
@@ -322,8 +341,7 @@ function UpgradeGate({
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
-              to="/"
-              hash="waitlist"
+              to="/pricing"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:opacity-90"
             >
               Upgrade to Pro
