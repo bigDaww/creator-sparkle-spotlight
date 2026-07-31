@@ -16,6 +16,7 @@ import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAlertsRouteImport } from './routes/_authenticated/alerts'
 import { Route as ApiWebhookPaddleRouteImport } from './routes/api/webhook/paddle'
+import { Route as ApiPublicWebhookPaddleRouteImport } from './routes/api/public/webhook/paddle'
 import { Route as ApiPublicHooksRefreshAlertsRouteImport } from './routes/api/public/hooks/refresh-alerts'
 
 const AuthRoute = AuthRouteImport.update({
@@ -52,6 +53,11 @@ const ApiWebhookPaddleRoute = ApiWebhookPaddleRouteImport.update({
   path: '/api/webhook/paddle',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicWebhookPaddleRoute = ApiPublicWebhookPaddleRouteImport.update({
+  id: '/api/public/webhook/paddle',
+  path: '/api/public/webhook/paddle',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicHooksRefreshAlertsRoute =
   ApiPublicHooksRefreshAlertsRouteImport.update({
     id: '/api/public/hooks/refresh-alerts',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/api/webhook/paddle': typeof ApiWebhookPaddleRoute
   '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
+  '/api/public/webhook/paddle': typeof ApiPublicWebhookPaddleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/optimize': typeof AuthenticatedOptimizeRoute
   '/api/webhook/paddle': typeof ApiWebhookPaddleRoute
   '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
+  '/api/public/webhook/paddle': typeof ApiPublicWebhookPaddleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -87,6 +95,7 @@ export interface FileRoutesById {
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
   '/api/webhook/paddle': typeof ApiWebhookPaddleRoute
   '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
+  '/api/public/webhook/paddle': typeof ApiPublicWebhookPaddleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/optimize'
     | '/api/webhook/paddle'
     | '/api/public/hooks/refresh-alerts'
+    | '/api/public/webhook/paddle'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -107,6 +117,7 @@ export interface FileRouteTypes {
     | '/optimize'
     | '/api/webhook/paddle'
     | '/api/public/hooks/refresh-alerts'
+    | '/api/public/webhook/paddle'
   id:
     | '__root__'
     | '/'
@@ -117,6 +128,7 @@ export interface FileRouteTypes {
     | '/_authenticated/optimize'
     | '/api/webhook/paddle'
     | '/api/public/hooks/refresh-alerts'
+    | '/api/public/webhook/paddle'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -125,6 +137,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   ApiWebhookPaddleRoute: typeof ApiWebhookPaddleRoute
   ApiPublicHooksRefreshAlertsRoute: typeof ApiPublicHooksRefreshAlertsRoute
+  ApiPublicWebhookPaddleRoute: typeof ApiPublicWebhookPaddleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -178,6 +191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiWebhookPaddleRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/webhook/paddle': {
+      id: '/api/public/webhook/paddle'
+      path: '/api/public/webhook/paddle'
+      fullPath: '/api/public/webhook/paddle'
+      preLoaderRoute: typeof ApiPublicWebhookPaddleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/refresh-alerts': {
       id: '/api/public/hooks/refresh-alerts'
       path: '/api/public/hooks/refresh-alerts'
@@ -209,17 +229,8 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   ApiWebhookPaddleRoute: ApiWebhookPaddleRoute,
   ApiPublicHooksRefreshAlertsRoute: ApiPublicHooksRefreshAlertsRoute,
+  ApiPublicWebhookPaddleRoute: ApiPublicWebhookPaddleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
