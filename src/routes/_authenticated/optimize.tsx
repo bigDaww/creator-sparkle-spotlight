@@ -33,8 +33,8 @@ function OptimizePage() {
   const plan = planQuery.data?.plan;
 
   useEffect(() => {
-    if (plan === "free") navigate({ to: "/pricing" });
-  }, [plan, navigate]);
+    if (plan === "free" || planQuery.isError) navigate({ to: "/pricing" });
+  }, [plan, planQuery.isError, navigate]);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -89,6 +89,7 @@ function OptimizePage() {
             <Link to="/dashboard" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Dashboard</Link>
             <Link to="/optimize" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Optimize</Link>
             <Link to="/alerts" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Alerts</Link>
+            <Link to="/pricing" className="rounded-md px-3 py-1.5 text-sm text-muted-foreground hover:bg-card hover:text-foreground" activeProps={{ className: "text-foreground bg-card" }}>Pricing</Link>
           </nav>
           <div className="flex items-center gap-4">
             <div className="hidden items-center gap-2 font-semibold sm:flex">
@@ -340,8 +341,7 @@ function UpgradeGate({
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
-              to="/"
-              hash="waitlist"
+              to="/pricing"
               className="inline-flex items-center gap-2 rounded-full bg-gradient-primary px-5 py-2 text-sm font-medium text-primary-foreground shadow-glow hover:opacity-90"
             >
               Upgrade to Pro
