@@ -1,6 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { Sparkles, Loader2, ArrowLeft, Copy, Check, Search, FileText, Quote, TrendingUp, ArrowRight, Lock, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { optimizeVideo } from "@/lib/optimize.functions";
 import { analyzeTranscript } from "@/lib/transcript.functions";
+import { getMyPlan } from "@/lib/plan.functions";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -26,6 +27,15 @@ export const Route = createFileRoute("/_authenticated/optimize")({
 
 function OptimizePage() {
   const optimize = useServerFn(optimizeVideo);
+  const navigate = useNavigate();
+  const fetchPlan = useServerFn(getMyPlan);
+  const planQuery = useQuery({ queryKey: ["my-plan"], queryFn: () => fetchPlan({}) });
+  const plan = planQuery.data?.plan;
+
+  useEffect(() => {
+    if (plan === "free") navigate({ to: "/pricing" });
+  }, [plan, navigate]);
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [tags, setTags] = useState("");

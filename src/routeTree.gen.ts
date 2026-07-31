@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
@@ -20,6 +21,11 @@ import { Route as ApiWebhookPaddleRouteImport } from './routes/api/webhook/paddl
 import { Route as ApiPublicWebhookPaddleRouteImport } from './routes/api/public/webhook/paddle'
 import { Route as ApiPublicHooksRefreshAlertsRouteImport } from './routes/api/public/hooks/refresh-alerts'
 
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PricingRoute = PricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/pricing': typeof PricingRoute
+  '/welcome': typeof WelcomeRoute
   '/alerts': typeof AuthenticatedAlertsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/pricing': typeof PricingRoute
+  '/welcome': typeof WelcomeRoute
   '/alerts': typeof AuthenticatedAlertsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/pricing': typeof PricingRoute
+  '/welcome': typeof WelcomeRoute
   '/_authenticated/alerts': typeof AuthenticatedAlertsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
@@ -112,6 +121,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/pricing'
+    | '/welcome'
     | '/alerts'
     | '/dashboard'
     | '/optimize'
@@ -123,6 +133,7 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/pricing'
+    | '/welcome'
     | '/alerts'
     | '/dashboard'
     | '/optimize'
@@ -135,6 +146,7 @@ export interface FileRouteTypes {
     | '/_authenticated'
     | '/auth'
     | '/pricing'
+    | '/welcome'
     | '/_authenticated/alerts'
     | '/_authenticated/dashboard'
     | '/_authenticated/optimize'
@@ -148,6 +160,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
   PricingRoute: typeof PricingRoute
+  WelcomeRoute: typeof WelcomeRoute
   ApiWebhookPaddleRoute: typeof ApiWebhookPaddleRoute
   ApiPublicHooksRefreshAlertsRoute: typeof ApiPublicHooksRefreshAlertsRoute
   ApiPublicWebhookPaddleRoute: typeof ApiPublicWebhookPaddleRoute
@@ -155,6 +168,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pricing': {
       id: '/pricing'
       path: '/pricing'
@@ -248,6 +268,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
   PricingRoute: PricingRoute,
+  WelcomeRoute: WelcomeRoute,
   ApiWebhookPaddleRoute: ApiWebhookPaddleRoute,
   ApiPublicHooksRefreshAlertsRoute: ApiPublicHooksRefreshAlertsRoute,
   ApiPublicWebhookPaddleRoute: ApiPublicWebhookPaddleRoute,
