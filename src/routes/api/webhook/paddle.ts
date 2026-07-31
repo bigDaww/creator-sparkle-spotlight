@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { createHmac, timingSafeEqual } from "crypto";
 
-export const Route = createFileRoute("/api/public/webhooks/paddle")({
+export const Route = createFileRoute("/api/webhook/paddle")({
   server: {
     handlers: {
       POST: async ({ request }) => {
@@ -63,8 +63,6 @@ export const Route = createFileRoute("/api/public/webhooks/paddle")({
         ];
 
         if (unlockEvents.includes(eventType)) {
-          const customerId =
-            data?.customer_id ?? data?.customer?.id ?? data?.subscription_id;
           const customData = data?.custom_data ?? {};
           const userId = customData?.user_id;
 

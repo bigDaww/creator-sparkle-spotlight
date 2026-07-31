@@ -15,7 +15,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedOptimizeRouteImport } from './routes/_authenticated/optimize'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAlertsRouteImport } from './routes/_authenticated/alerts'
-import { Route as ApiPublicWebhooksPaddleRouteImport } from './routes/api/public/webhooks/paddle'
+import { Route as ApiWebhookPaddleRouteImport } from './routes/api/webhook/paddle'
 import { Route as ApiPublicHooksRefreshAlertsRouteImport } from './routes/api/public/hooks/refresh-alerts'
 
 const AuthRoute = AuthRouteImport.update({
@@ -47,9 +47,9 @@ const AuthenticatedAlertsRoute = AuthenticatedAlertsRouteImport.update({
   path: '/alerts',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const ApiPublicWebhooksPaddleRoute = ApiPublicWebhooksPaddleRouteImport.update({
-  id: '/api/public/webhooks/paddle',
-  path: '/api/public/webhooks/paddle',
+const ApiWebhookPaddleRoute = ApiWebhookPaddleRouteImport.update({
+  id: '/api/webhook/paddle',
+  path: '/api/webhook/paddle',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicHooksRefreshAlertsRoute =
@@ -65,8 +65,8 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AuthenticatedAlertsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
+  '/api/webhook/paddle': typeof ApiWebhookPaddleRoute
   '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
-  '/api/public/webhooks/paddle': typeof ApiPublicWebhooksPaddleRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -74,8 +74,8 @@ export interface FileRoutesByTo {
   '/alerts': typeof AuthenticatedAlertsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/optimize': typeof AuthenticatedOptimizeRoute
+  '/api/webhook/paddle': typeof ApiWebhookPaddleRoute
   '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
-  '/api/public/webhooks/paddle': typeof ApiPublicWebhooksPaddleRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -85,8 +85,8 @@ export interface FileRoutesById {
   '/_authenticated/alerts': typeof AuthenticatedAlertsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/optimize': typeof AuthenticatedOptimizeRoute
+  '/api/webhook/paddle': typeof ApiWebhookPaddleRoute
   '/api/public/hooks/refresh-alerts': typeof ApiPublicHooksRefreshAlertsRoute
-  '/api/public/webhooks/paddle': typeof ApiPublicWebhooksPaddleRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -96,8 +96,8 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/optimize'
+    | '/api/webhook/paddle'
     | '/api/public/hooks/refresh-alerts'
-    | '/api/public/webhooks/paddle'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -105,8 +105,8 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/optimize'
+    | '/api/webhook/paddle'
     | '/api/public/hooks/refresh-alerts'
-    | '/api/public/webhooks/paddle'
   id:
     | '__root__'
     | '/'
@@ -115,16 +115,16 @@ export interface FileRouteTypes {
     | '/_authenticated/alerts'
     | '/_authenticated/dashboard'
     | '/_authenticated/optimize'
+    | '/api/webhook/paddle'
     | '/api/public/hooks/refresh-alerts'
-    | '/api/public/webhooks/paddle'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiWebhookPaddleRoute: typeof ApiWebhookPaddleRoute
   ApiPublicHooksRefreshAlertsRoute: typeof ApiPublicHooksRefreshAlertsRoute
-  ApiPublicWebhooksPaddleRoute: typeof ApiPublicWebhooksPaddleRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -171,11 +171,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAlertsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/api/public/webhooks/paddle': {
-      id: '/api/public/webhooks/paddle'
-      path: '/api/public/webhooks/paddle'
-      fullPath: '/api/public/webhooks/paddle'
-      preLoaderRoute: typeof ApiPublicWebhooksPaddleRouteImport
+    '/api/webhook/paddle': {
+      id: '/api/webhook/paddle'
+      path: '/api/webhook/paddle'
+      fullPath: '/api/webhook/paddle'
+      preLoaderRoute: typeof ApiWebhookPaddleRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/hooks/refresh-alerts': {
@@ -207,8 +207,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiWebhookPaddleRoute: ApiWebhookPaddleRoute,
   ApiPublicHooksRefreshAlertsRoute: ApiPublicHooksRefreshAlertsRoute,
-  ApiPublicWebhooksPaddleRoute: ApiPublicWebhooksPaddleRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
