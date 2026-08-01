@@ -95,6 +95,9 @@ function Index() {
             <a href="#compare" className="story-link transition-colors hover:text-foreground">Before / after</a>
             <Link to="/pricing" className="story-link transition-colors hover:text-foreground">Pricing</Link>
             <a href="#faq" className="story-link transition-colors hover:text-foreground">FAQ</a>
+            <Link to="/terms" className="story-link transition-colors hover:text-foreground">Terms</Link>
+            <Link to="/privacy" className="story-link transition-colors hover:text-foreground">Privacy</Link>
+            <Link to="/refund-policy" className="story-link transition-colors hover:text-foreground">Refunds</Link>
           </nav>
           <div className="flex items-center gap-2">
             <UserMenu />
