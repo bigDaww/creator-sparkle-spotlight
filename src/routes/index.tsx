@@ -266,9 +266,6 @@ function Index() {
         </div>
       </section>
 
-      <footer className="border-t border-border/60 py-10 text-center text-xs text-muted-foreground">
-        CoraHQ · Built for YouTubers
-      </footer>
     </div>
   );
 }
