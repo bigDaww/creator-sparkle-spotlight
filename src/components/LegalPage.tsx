@@ -37,6 +37,21 @@ export function LegalPage({
         <p className="text-xs uppercase tracking-[0.25em] text-primary">Legal</p>
         <h1 className="mt-3 text-4xl font-semibold tracking-tight">{title}</h1>
         <p className="mt-2 text-sm text-muted-foreground">Last updated: {updated}</p>
+        <nav className="mt-5 flex flex-wrap gap-2">
+          {[
+            { to: "/terms", label: "Terms of Service" },
+            { to: "/privacy", label: "Privacy Policy" },
+            { to: "/refund-policy", label: "Refund Policy" },
+          ].map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="rounded-full border border-border/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:text-foreground data-[status=active]:border-primary/50 data-[status=active]:text-foreground"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
         <p className="mt-6 text-base leading-relaxed text-muted-foreground">{intro}</p>
         <div className="mt-10 space-y-10">{children}</div>
       </main>
