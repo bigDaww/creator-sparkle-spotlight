@@ -194,6 +194,10 @@ function ScanView({ active, history }: { active: Scan; history: Scan[] }) {
         ))}
       </div>
 
+      <p className="mt-4 text-xs leading-relaxed text-muted-foreground/80">
+        Based on patterns from testing real AI citation behavior across YouTube niches — not a generic keyword checklist.
+      </p>
+
       {/* Expandable panel */}
       <div
         className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-out ${

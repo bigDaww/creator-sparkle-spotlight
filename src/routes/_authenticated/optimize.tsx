@@ -724,6 +724,10 @@ function ResultView({
           </ul>
         </section>
       )}
+
+      <p className="text-xs leading-relaxed text-muted-foreground/80">
+        Based on patterns from testing real AI citation behavior across YouTube niches — not a generic keyword checklist.
+      </p>
     </div>
   );
 }
