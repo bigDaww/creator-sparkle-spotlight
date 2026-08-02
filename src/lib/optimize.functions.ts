@@ -78,9 +78,9 @@ export const optimizeVideo = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => OptimizeInput.parse(input))
   .handler(async ({ data }) => {
-    const apiKey = process.env.LOVABLE_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
-      throw new Error("LOVABLE_API_KEY is not configured.");
+      throw new Error("GEMINI_API_KEY is not configured.");
     }
 
     const userPayload = JSON.stringify(
@@ -94,26 +94,29 @@ export const optimizeVideo = createServerFn({ method: "POST" })
       2,
     );
 
-    const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const resp = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+      {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        "Lovable-API-Key": apiKey,
+        authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "google/gemini-3.6-flash",
+        model: "gemini-2.5-flash",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPayload },
         ],
       }),
-    });
+    },
+    );
 
     if (!resp.ok) {
       const text = await resp.text().catch(() => "");
       if (resp.status === 429) throw new Error("Rate limit — try again shortly.");
       if (resp.status === 402) throw new Error("AI credits exhausted. Please upgrade your plan.");
-      throw new Error(`AI gateway error (${resp.status}): ${text.slice(0, 300)}`);
+      throw new Error(`Gemini API error (${resp.status}): ${text.slice(0, 300)}`);
     }
 
     const json = (await resp.json()) as {
