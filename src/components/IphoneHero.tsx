@@ -1,8 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import phoneVideoAsset from "@/assets/phone-hero-2.mp4.asset.json";
 
-// Replace this URL to swap the phone video. Nothing else needs to change.
-export const DEFAULT_PHONE_VIDEO_SRC = phoneVideoAsset.url;
+// Static asset committed in the repo at public/videos/hero.mp4
+export const DEFAULT_PHONE_VIDEO_SRC = "/videos/hero.mp4";
 
 // Fallback poster shown while loading or if the video fails to load.
 const DEFAULT_PHONE_POSTER =
