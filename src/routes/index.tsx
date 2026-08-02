@@ -3,6 +3,13 @@ import { ArrowRight, Play, ClipboardPaste, Wand2, Copy, Quote } from "lucide-rea
 import { Button } from "@/components/ui/button";
 import { IphoneHero } from "@/components/IphoneHero";
 import { UserMenu } from "@/components/UserMenu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -95,9 +102,22 @@ function Index() {
             <a href="#compare" className="story-link transition-colors hover:text-foreground">Before / after</a>
             <Link to="/pricing" className="story-link transition-colors hover:text-foreground">Pricing</Link>
             <a href="#faq" className="story-link transition-colors hover:text-foreground">FAQ</a>
-            <Link to="/terms" className="story-link transition-colors hover:text-foreground">Terms</Link>
-            <Link to="/privacy" className="story-link transition-colors hover:text-foreground">Privacy</Link>
-            <Link to="/refund-policy" className="story-link transition-colors hover:text-foreground">Refunds</Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex items-center gap-1 outline-none transition-colors hover:text-foreground">
+                Legal <ChevronDown className="h-3.5 w-3.5" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuItem asChild>
+                  <Link to="/terms">Terms of Service</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/privacy">Privacy Policy</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link to="/refund-policy">Refund Policy</Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
           <div className="flex items-center gap-2">
             <UserMenu />
