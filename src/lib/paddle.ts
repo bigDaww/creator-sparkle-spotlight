@@ -7,6 +7,8 @@ export const PRICE_YEARLY = (import.meta.env['VITE_PADDLE_PRICE_YEARLY'] as stri
 
 export const paddleConfigured = Boolean(PADDLE_CLIENT_TOKEN);
 
+export const PADDLE_CHECKOUT_COMPLETED = "paddle:checkout-completed";
+
 let paddlePromise: Promise<Paddle | undefined> | null = null;
 
 export function getPaddle() {
@@ -14,6 +16,11 @@ export function getPaddle() {
     paddlePromise = initializePaddle({
       environment: PADDLE_ENV === "production" ? "production" : "sandbox",
       token: PADDLE_CLIENT_TOKEN,
+      eventCallback: (event) => {
+        if (event.name === "checkout.completed" && typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent(PADDLE_CHECKOUT_COMPLETED));
+        }
+      },
     });
   }
   return paddlePromise;

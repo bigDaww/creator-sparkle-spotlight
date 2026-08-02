@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { LogOut, Sparkles, User as UserIcon } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
+import { getMyPlan } from "@/lib/plan.functions";
+import { PADDLE_CHECKOUT_COMPLETED } from "@/lib/paddle";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -20,6 +23,15 @@ export function UserMenu() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const fetchPlan = useServerFn(getMyPlan);
+  const planQuery = useQuery({
+    queryKey: ["my-plan"],
+    queryFn: () => fetchPlan({}),
+    enabled: Boolean(user),
+    staleTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
+  });
 
   useEffect(() => {
     let mounted = true;
@@ -36,6 +48,16 @@ export function UserMenu() {
       data.subscription.unsubscribe();
     };
   }, []);
+
+  useEffect(() => {
+    const onCompleted = () => {
+      // Give the Paddle webhook a moment to flip the plan, then refetch.
+      setTimeout(() => queryClient.invalidateQueries({ queryKey: ["my-plan"] }), 2500);
+      setTimeout(() => queryClient.invalidateQueries({ queryKey: ["my-plan"] }), 8000);
+    };
+    window.addEventListener(PADDLE_CHECKOUT_COMPLETED, onCompleted);
+    return () => window.removeEventListener(PADDLE_CHECKOUT_COMPLETED, onCompleted);
+  }, [queryClient]);
 
   if (loading) return <div className="h-9 w-9" aria-hidden />;
 
@@ -62,6 +84,11 @@ export function UserMenu() {
   const name = meta.full_name || meta.name || email.split("@")[0] || "You";
   const avatarUrl = meta.avatar_url || meta.picture;
   const initial = (name[0] || "?").toUpperCase();
+  const planLabel = planQuery.isPending
+    ? "…"
+    : planQuery.data?.plan === "paid"
+      ? "Pro"
+      : "Free";
 
   const handleSignOut = async () => {
     await queryClient.cancelQueries();
@@ -107,7 +134,7 @@ export function UserMenu() {
           <div className="flex items-center justify-between rounded-md border border-border/60 bg-background/40 px-3 py-2">
             <div>
               <div className="text-[10px] uppercase tracking-[0.16em] text-muted-foreground">Plan</div>
-              <div className="mt-0.5 text-sm font-semibold">Free</div>
+              <div className="mt-0.5 text-sm font-semibold">{planLabel}</div>
             </div>
             <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-primary">
               Active
