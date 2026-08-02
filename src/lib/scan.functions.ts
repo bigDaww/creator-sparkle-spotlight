@@ -26,8 +26,8 @@ const ResultSchema = z.object({
 });
 
 async function callLovableAI(channel: string, niche: string): Promise<z.infer<typeof ResultSchema>> {
-  const key = process.env.LOVABLE_API_KEY;
-  if (!key) throw new Error("Lovable AI is not configured");
+  const key = process.env.GEMINI_API_KEY;
+  if (!key) throw new Error("GEMINI_API_KEY is not configured");
 
   const system = `You are an LLM SEO analyst. Given a YouTube channel name/URL and a niche, simulate whether ${LLMS.join(
     ", ",
@@ -35,25 +35,28 @@ async function callLovableAI(channel: string, niche: string): Promise<z.infer<ty
 
   const user = `Channel: ${channel}\nNiche: ${niche}\n\nReturn ONLY JSON with keys results (array of {model, prompt, cited, verdict, recommendation}), score (integer 0-100), summary (string).`;
 
-  const resp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+  const resp = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
+    {
     method: "POST",
     headers: {
       "content-type": "application/json",
-      "Lovable-API-Key": key,
+      authorization: `Bearer ${key}`,
     },
     body: JSON.stringify({
-      model: "google/gemini-3.6-flash",
+      model: "gemini-2.5-flash",
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
       ],
       response_format: { type: "json_object" },
     }),
-  });
+  },
+  );
 
   if (resp.status === 429) throw new Error("AI rate limit — try again in a moment.");
   if (resp.status === 402) throw new Error("AI credits exhausted for this workspace.");
-  if (!resp.ok) throw new Error(`AI gateway error (${resp.status})`);
+  if (!resp.ok) throw new Error(`Gemini API error (${resp.status})`);
 
   const json = (await resp.json()) as { choices?: Array<{ message?: { content?: string } }> };
   const content = json.choices?.[0]?.message?.content ?? "{}";
