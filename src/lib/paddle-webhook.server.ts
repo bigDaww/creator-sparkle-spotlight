@@ -20,6 +20,18 @@ async function setPlan(userId: string, plan: "paid" | "free") {
   return !error;
 }
 
+export function paddleWebhookInfo(): Response {
+  return Response.json(
+    {
+      ok: true,
+      endpoint: "paddle-webhook",
+      method: "POST",
+      message: "This endpoint accepts POST requests from Paddle with a paddle-signature header.",
+    },
+    { status: 200, headers: { "cache-control": "no-store" } }
+  );
+}
+
 export async function handlePaddleWebhook(request: Request): Promise<Response> {
   const secret = process.env["PADDLE_WEBHOOK_SECRET"];
   if (!secret) {
