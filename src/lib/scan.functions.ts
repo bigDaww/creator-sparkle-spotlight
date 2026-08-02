@@ -44,7 +44,7 @@ async function callLovableAI(channel: string, niche: string): Promise<z.infer<ty
       authorization: `Bearer ${key}`,
     },
     body: JSON.stringify({
-      model: "gemini-2.5-flash",
+      model: "gemini-flash-latest",
       messages: [
         { role: "system", content: system },
         { role: "user", content: user },
