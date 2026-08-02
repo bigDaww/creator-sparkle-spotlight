@@ -103,7 +103,7 @@ export const optimizeVideo = createServerFn({ method: "POST" })
         authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "gemini-2.5-flash",
+        model: "gemini-flash-latest",
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
           { role: "user", content: userPayload },
