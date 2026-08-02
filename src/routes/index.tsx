@@ -164,7 +164,12 @@ function Index() {
             <div className="max-w-xs">
               <p className="text-xs uppercase tracking-[0.2em] text-primary">How it works</p>
               <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">Three steps.</h2>
-              <p className="mt-4 text-sm text-muted-foreground">No dashboards to learn. No scripts to run. Paste, rewrite, paste back.</p>
+              <p className="mt-4 text-sm text-muted-foreground">
+                We tested our approach across multiple prompts and YouTube niches, analyzing what AI engines like
+                ChatGPT, Perplexity and Gemini actually cite when answering real viewer questions — then built that
+                pattern into how we score and rewrite your content.
+              </p>
+              <p className="mt-3 text-sm text-muted-foreground">No dashboards to learn. No scripts to run. Paste, rewrite, paste back.</p>
             </div>
             <ol className="divide-y divide-border/60">
               {STEPS.map((s, i) => (
