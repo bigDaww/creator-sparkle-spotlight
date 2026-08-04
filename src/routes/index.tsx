@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Play, ClipboardPaste, Wand2, Copy, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IphoneHero } from "@/components/IphoneHero";
+import { LandingScan } from "@/components/LandingScan";
 import { UserMenu } from "@/components/UserMenu";
 import {
   DropdownMenu,
@@ -178,6 +179,8 @@ function Index() {
       </section>
 
       {/* HOW IT WORKS */}
+      <LandingScan />
+
       <section id="how" className="border-t border-border/60">
         <div className="mx-auto max-w-6xl px-6 py-24">
           <div className="grid gap-10 lg:grid-cols-[auto_1fr] lg:gap-20">
