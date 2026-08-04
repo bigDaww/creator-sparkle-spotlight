@@ -217,7 +217,7 @@ function AlertsPage() {
             This is a competitor (alert me if they overtake me)
           </label>
 
-          {showUpgrade && (
+          {showUpgrade && isPaywallEnabledClient() && (
             <div className="mt-4 rounded-lg border border-primary/40 bg-primary/10 p-4 text-sm">
               <p className="font-medium">Tracking is a paid feature</p>
               <p className="mt-1 text-muted-foreground">Upgrade to track channels and get daily change alerts across ChatGPT, Perplexity, Gemini and Claude.</p>
