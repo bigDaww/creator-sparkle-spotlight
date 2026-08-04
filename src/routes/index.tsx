@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { ArrowRight, Play, ClipboardPaste, Wand2, Copy, Quote } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { IphoneHero } from "@/components/IphoneHero";
+import { LandingScan } from "@/components/LandingScan";
 import { UserMenu } from "@/components/UserMenu";
 import {
   DropdownMenu,
