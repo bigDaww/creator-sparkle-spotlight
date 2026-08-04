@@ -11,6 +11,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { optimizeVideo } from "@/lib/optimize.functions";
 import { analyzeTranscript } from "@/lib/transcript.functions";
 import { getMyPlan } from "@/lib/plan.functions";
+import { isPaywallEnabledClient } from "@/lib/paywall";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
 
@@ -33,6 +34,7 @@ function OptimizePage() {
   const plan = planQuery.data?.plan;
 
   useEffect(() => {
+    if (!isPaywallEnabledClient()) return;
     if (plan === "free" || planQuery.isError) navigate({ to: "/pricing" });
   }, [plan, planQuery.isError, navigate]);
 
@@ -70,7 +72,7 @@ function OptimizePage() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Failed"),
   });
 
-  if (planQuery.isPending || plan !== "paid") {
+  if (isPaywallEnabledClient() && (planQuery.isPending || plan !== "paid")) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background text-muted-foreground">
         <Loader2 className="h-5 w-5 animate-spin" />
@@ -250,7 +252,7 @@ function TranscriptCitability() {
         </Button>
       </form>
 
-      {locked && <UpgradeGate />}
+      {locked && isPaywallEnabledClient() && <UpgradeGate />}
 
       {result && (
         <>

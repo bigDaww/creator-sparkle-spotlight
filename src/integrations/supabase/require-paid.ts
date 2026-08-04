@@ -10,6 +10,11 @@ export const PAID_PLAN_REQUIRED = "PAID_PLAN_REQUIRED";
 export const requirePaidPlan = createMiddleware({ type: "function" })
   .middleware([requireSupabaseAuth])
   .server(async ({ next, context }) => {
+    // Global bypass: when PAYWALL_ENABLED === "false", skip plan checks entirely.
+    if (process.env['PAYWALL_ENABLED'] === "false") {
+      return next({ context: { plan: "paid" as const } });
+    }
+
     const { supabase, userId } = context;
     const { data, error } = await supabase
       .from("profiles")
