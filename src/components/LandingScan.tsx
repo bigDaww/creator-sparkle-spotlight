@@ -93,13 +93,9 @@ export function LandingScan() {
     <section id="scan" className="border-t border-border/60">
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="max-w-2xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-primary">Channel citation scan</p>
-          <h2 className="mt-3 text-4xl font-semibold tracking-tight md:text-5xl">
+          <h2 className="text-4xl font-semibold tracking-tight md:text-5xl">
             See if AI engines cite your channel.
           </h2>
-          <p className="mt-4 text-muted-foreground">
-            Run a live check across ChatGPT, Perplexity, Gemini and Claude — then fix what's missing.
-          </p>
         </div>
 
         <form

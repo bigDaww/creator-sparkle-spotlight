@@ -165,6 +165,8 @@ function Index() {
             </div>
           </div>
 
+          <LandingScan />
+
           <div className="mt-20">
             <p className="text-center text-xs uppercase tracking-[0.2em] text-muted-foreground">Optimized for</p>
             <div className="mt-6 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
@@ -179,7 +181,6 @@ function Index() {
       </section>
 
       {/* HOW IT WORKS */}
-      <LandingScan />
 
       <section id="how" className="border-t border-border/60">
         <div className="mx-auto max-w-6xl px-6 py-24">
