@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { UserMenu } from "@/components/UserMenu";
+import { isPaywallEnabledClient } from "@/lib/paywall";
 import {
   listTrackedChannels,
   listAlertEvents,
