@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { trackEvent } from "@/lib/analytics";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -47,6 +48,7 @@ function AuthPage() {
         });
         if (error) throw error;
         toast.success("Account created — check your email if confirmation is required.");
+        trackEvent("sign_up", { method: "email", plan: "free" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
@@ -68,6 +70,7 @@ function AuthPage() {
       });
       if (result.error) throw result.error;
       if (result.redirected) return;
+      trackEvent("sign_up", { method: "google", plan: "free" });
       await router.invalidate();
       navigate({ to: "/dashboard" });
     } catch (err) {
