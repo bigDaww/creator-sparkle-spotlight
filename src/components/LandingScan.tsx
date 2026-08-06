@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { runChannelScan } from "@/lib/scan.functions";
+import { trackEvent } from "@/lib/analytics";
 
 type EngineResult = {
   model: string;
@@ -79,6 +80,13 @@ export function LandingScan() {
         throw new Error("Sign in to run a scan");
       }
       return scan({ data: { channel: normalizeChannel(channel), niche } });
+    },
+    onSuccess: (data: any) => {
+      trackEvent("free_scan_completed", {
+        auth_status: "logged_in",
+        score: Number(data?.score ?? 0),
+        niche: String(data?.niche ?? ""),
+      });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Scan failed"),
   });
