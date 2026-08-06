@@ -53,6 +53,11 @@ function PricingPage() {
     }
     setLoading(true);
     try {
+      trackEvent("checkout_started", {
+        plan: "free",
+        billing_cycle: cycle,
+        price_id: priceId,
+      });
       await openCheckout({
         priceId,
         userId: user.id,
