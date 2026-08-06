@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { UserMenu } from "@/components/UserMenu";
 import { openCheckout, paddleConfigured, PRICE_MONTHLY, PRICE_YEARLY } from "@/lib/paddle";
+import { trackEvent } from "@/lib/analytics";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/pricing")({
@@ -53,6 +54,11 @@ function PricingPage() {
     }
     setLoading(true);
     try {
+      trackEvent("checkout_started", {
+        plan: "free",
+        billing_cycle: cycle,
+        price_id: priceId,
+      });
       await openCheckout({
         priceId,
         userId: user.id,

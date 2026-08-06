@@ -1,4 +1,5 @@
 import { initializePaddle, type Paddle } from "@paddle/paddle-js";
+import { trackEvent } from "@/lib/analytics";
 
 export const PADDLE_ENV = (import.meta.env['VITE_PADDLE_ENV'] as string | undefined) ?? "sandbox";
 export const PADDLE_CLIENT_TOKEN = (import.meta.env['VITE_PADDLE_CLIENT_TOKEN'] as string | undefined) ?? "";
@@ -18,6 +19,10 @@ export function getPaddle() {
       token: PADDLE_CLIENT_TOKEN,
       eventCallback: (event) => {
         if (event.name === "checkout.completed" && typeof window !== "undefined") {
+          trackEvent("subscription_completed", {
+            plan: "paid",
+            price_id: String(event.data?.items?.[0]?.price_id ?? ""),
+          });
           window.dispatchEvent(new CustomEvent(PADDLE_CHECKOUT_COMPLETED));
         }
       },
